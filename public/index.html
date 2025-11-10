@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWFEX Workflow Tester</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 600px;
+      height: 300px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      resize: none;
+      outline: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      border: none;
+      background-color: #2563eb;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    pre {
+      background: #111;
+      color: #0f0;
+      width: 600px;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>AWFEX - Workflow Engine Tester</h1>
+
+  <textarea id="jsonInput">{
+  "print": [
+    {
+      "sub": [
+        {
+          "add": [2, 3]
+        },
+        4
+      ]
+    }
+  ]
+}</textarea>
+
+  <button onclick="runWorkflow()">Run Workflow</button>
+
+  <pre id="output">Result will appear here...</pre>
+
+  <script>
+    async function runWorkflow() {
+      const input = document.getElementById("jsonInput").value;
+      const output = document.getElementById("output");
+      output.textContent = "Running...";
+      try {
+        const res = await fetch("/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: input
+        });
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>

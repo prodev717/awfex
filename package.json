@@ -1,0 +1,28 @@
+{
+  "name": "awfex",
+  "version": "1.0.0",
+  "description": "AWEFX - Automation WorkFlow Engine Experiment",
+  "homepage": "https://github.com/prodev717/awfex#readme",
+  "bugs": {
+    "url": "https://github.com/prodev717/awfex/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prodev717/awfex.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
