@@ -79,6 +79,18 @@ app.get("/workflow/:name", async (req, res) => {
   }
 });
 
+app.delete("/workflow/:name", async (req, res) => {
+  try {
+    const deleted = await Workflows.destroy({ where: { name: req.params.name } });
+    if (deleted === 0) {
+      return res.status(404).json({ success: false, error: "Workflow not found" });
+    }
+    res.json({ success: true, message: "Workflow deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get("/workflow", async (req, res) => {
   try {
     const workflows = await Workflows.findAll({

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FlowCanvas from "./components/FlowCanvas";
 import LeftPanel from "./components/LeftPanel";
 import Toolbar from "./components/Toolbar";
@@ -6,19 +6,17 @@ import FunctionNode from "./nodes/FunctionNode";
 import InputNode from "./nodes/InputNode";
 import { applyEdgeChanges, applyNodeChanges, addEdge } from "reactflow";
 
+const nodeTypes = {
+  custom: FunctionNode,
+  inputNode: InputNode,
+};
+
 export default function App() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [functions, setFunctions] = useState([]);
   const [selectedFunc, setSelectedFunc] = useState("");
-
-  const nodeTypes = useMemo(
-    () => ({
-      custom: FunctionNode,
-      inputNode: InputNode,
-    }),
-    []
-  );
+  const [workflows, setWorkflows] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/functions")
@@ -26,6 +24,60 @@ export default function App() {
       .then(setFunctions)
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    fetchWorkflows();
+  }, []);
+
+  const fetchWorkflows = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/workflow");
+      if (!response.ok) throw new Error("Failed to fetch workflows");
+      const data = await response.json();
+      
+      if (!data.success || !Array.isArray(data.workflows)) {
+        setWorkflows([]);
+        return;
+      }
+      
+      // Fetch each workflow's details
+      const workflowPromises = data.workflows.map(async (name) => {
+        try {
+          const workflowResponse = await fetch(`http://localhost:5000/workflow/${name}`);
+          if (!workflowResponse.ok) throw new Error(`Failed to fetch ${name}`);
+          const workflowData = await workflowResponse.json();
+          
+          return {
+            id: name,
+            name: name,
+            nodeCount: countNodes(workflowData),
+            date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            workflow: workflowData,
+          };
+        } catch (error) {
+          console.error(`Error fetching workflow ${name}:`, error);
+          return null;
+        }
+      });
+      
+      const workflowResults = await Promise.all(workflowPromises);
+      const validWorkflows = workflowResults.filter(w => w !== null);
+      
+      setWorkflows(validWorkflows);
+    } catch (error) {
+      console.error("Failed to fetch workflows:", error);
+      setWorkflows([]);
+    }
+  };
+
+  const countNodes = (workflow) => {
+    if (!workflow) return 0;
+    if (typeof workflow !== 'object') return 1;
+    if (Array.isArray(workflow)) {
+      return workflow.reduce((acc, item) => acc + countNodes(item), 0);
+    }
+    return Object.values(workflow).reduce((acc, val) => acc + countNodes(val), 1);
+  };
 
   const deleteNode = useCallback((id) => {
     setNodes((nodes) => nodes.filter((n) => n.id !== id));
@@ -42,10 +94,12 @@ export default function App() {
     (c) => setNodes((nodes) => applyNodeChanges(c, nodes)),
     []
   );
+
   const onEdgesChange = useCallback(
     (c) => setEdges((edges) => applyEdgeChanges(c, edges)),
     []
   );
+
   const onConnect = useCallback(
     (params) => setEdges((edges) => addEdge(params, edges)),
     []
@@ -111,22 +165,100 @@ export default function App() {
     return finals.map((n) => resolveNode(n.id));
   }, [nodes, edges]);
 
-  const workflowJSON = useMemo(() => buildWorkflowJSON(), [buildWorkflowJSON]);
+  const workflowJSON = buildWorkflowJSON();
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(JSON.stringify(workflowJSON, null, 2));
-    alert("Copied!");
+    alert("Copied to clipboard!");
   };
 
   const runWorkflow = () => {
+    if (!workflowJSON) {
+      alert("No workflow to run. Please create nodes and connect them.");
+      return;
+    }
+
     fetch("http://localhost:5000/run", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(workflowJSON),
     })
-      .then((res) => res.json())
-      .then((data) => alert(JSON.stringify(data, null, 2)))
-      .catch((err) => alert(err.message));
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => alert(`Result:\n${JSON.stringify(data, null, 2)}`))
+      .catch((err) => alert(`Error: ${err.message}`));
+  };
+
+  const handleSaveWorkflow = async (name, queryParams) => {
+    if (!workflowJSON) {
+      alert("No workflow to save. Please create nodes and connect them.");
+      throw new Error("No workflow to save");
+    }
+
+    try {
+      const queryString = queryParams ? `?${queryParams}` : "";
+      const response = await fetch(`http://localhost:5000/workflow${queryString}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          workflow: workflowJSON
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Failed to save workflow");
+      }
+
+      const data = await response.json();
+      alert(`Workflow "${data.name}" saved successfully!`);
+      
+      await fetchWorkflows();
+    } catch (error) {
+      alert(`Error saving workflow: ${error.message}`);
+      throw error;
+    }
+  };
+
+  const handleSelectWorkflow = async (workflowId) => {
+    try {
+      const workflow = workflows.find((w) => w.id === workflowId);
+      if (!workflow) {
+        console.error("Workflow not found:", workflowId);
+        return;
+      }
+
+      const response = await fetch(`http://localhost:5000/workflow/${workflow.name}`);
+      if (!response.ok) throw new Error("Failed to load workflow");
+      
+      const data = await response.json();
+      
+      console.log("Loading workflow:", data);
+      alert(`Loading workflow: ${workflow.name}\n(Node reconstruction not yet implemented)`);
+      
+    } catch (error) {
+      console.error("Failed to load workflow:", error);
+      alert(`Error loading workflow: ${error.message}`);
+    }
+  };
+
+  const handleDeleteWorkflow = async (workflowId) => {
+    const workflow = workflows.find((w) => w.id === workflowId);
+    if (!workflow) return;
+
+    if (!confirm(`Delete workflow "${workflow.name}"?`)) return;
+
+    try {
+      setWorkflows((prev) => prev.filter((w) => w.id !== workflowId));
+      alert(`Workflow "${workflow.name}" deleted`);
+    } catch (error) {
+      console.error("Failed to delete workflow:", error);
+      alert(`Error deleting workflow: ${error.message}`);
+      await fetchWorkflows();
+    }
   };
 
   const prettyJSON = workflowJSON
@@ -134,16 +266,33 @@ export default function App() {
     : "// Connect nodes to generate JSON";
 
   return (
-    <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
-      <LeftPanel prettyJSON={prettyJSON} onCopy={copyToClipboard} onRun={runWorkflow} />
+    <div 
+      style={{ 
+        width: "100vw", 
+        height: "100vh", 
+        display: "flex",
+        margin: 0,
+        padding: 0,
+        overflow: "hidden"
+      }}
+    >
+      <LeftPanel
+        prettyJSON={prettyJSON}
+        onCopy={copyToClipboard}
+        onRun={runWorkflow}
+        workflows={workflows}
+        onSelectWorkflow={handleSelectWorkflow}
+        onDeleteWorkflow={handleDeleteWorkflow}
+      />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <Toolbar
           functions={functions}
           selectedFunc={selectedFunc}
           setSelectedFunc={setSelectedFunc}
           onAddFunc={addFunctionNode}
           onAddInput={addInputNode}
+          onSaveWorkflow={handleSaveWorkflow}
         />
 
         <FlowCanvas
