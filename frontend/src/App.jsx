@@ -40,7 +40,6 @@ export default function App() {
         return;
       }
       
-      // Fetch each workflow's details
       const workflowPromises = data.workflows.map(async (name) => {
         try {
           const workflowResponse = await fetch(`http://localhost:5000/workflow/${name}`);
@@ -50,9 +49,9 @@ export default function App() {
           return {
             id: name,
             name: name,
-            nodeCount: countNodes(workflowData),
+            nodeCount: countNodes(workflowData.workflow),
             date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            workflow: workflowData,
+            workflow: workflowData.workflow,
           };
         } catch (error) {
           console.error(`Error fetching workflow ${name}:`, error);
@@ -187,7 +186,13 @@ export default function App() {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
-      .then((data) => alert(`Result:\n${JSON.stringify(data, null, 2)}`))
+      .then((data) => {
+        if (data.success) {
+          alert(`Result:\n${JSON.stringify(data.result, null, 2)}`);
+        } else {
+          throw new Error(data.error || "Run failed");
+        }
+      })
       .catch((err) => alert(`Error: ${err.message}`));
   };
 
@@ -197,26 +202,34 @@ export default function App() {
       throw new Error("No workflow to save");
     }
 
+    if (!name || name.trim() === "") {
+      alert("Please enter a workflow name");
+      throw new Error("Workflow name is required");
+    }
+
     try {
-      const queryString = queryParams ? `?${queryParams}` : "";
-      const response = await fetch(`http://localhost:5000/workflow${queryString}`, {
+      const response = await fetch(`http://localhost:5000/workflow`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name,
+          name: name.trim(),
           workflow: workflowJSON
         }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Failed to save workflow");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to save workflow");
       }
 
       const data = await response.json();
-      alert(`Workflow "${data.name}" saved successfully!`);
       
-      await fetchWorkflows();
+      if (data.success) {
+        alert(`Workflow "${name}" saved successfully!`);
+        await fetchWorkflows();
+      } else {
+        throw new Error(data.error || "Save failed");
+      }
     } catch (error) {
       alert(`Error saving workflow: ${error.message}`);
       throw error;
@@ -232,12 +245,20 @@ export default function App() {
       }
 
       const response = await fetch(`http://localhost:5000/workflow/${workflow.name}`);
-      if (!response.ok) throw new Error("Failed to load workflow");
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to load workflow");
+      }
       
       const data = await response.json();
       
-      console.log("Loading workflow:", data);
-      alert(`Loading workflow: ${workflow.name}\n(Node reconstruction not yet implemented)`);
+      if (data.success) {
+        console.log("Loading workflow:", data.workflow);
+        alert(`Loading workflow: ${data.name}\n(Node reconstruction not yet implemented)`);
+      } else {
+        throw new Error(data.error || "Load failed");
+      }
       
     } catch (error) {
       console.error("Failed to load workflow:", error);
@@ -252,12 +273,26 @@ export default function App() {
     if (!confirm(`Delete workflow "${workflow.name}"?`)) return;
 
     try {
-      setWorkflows((prev) => prev.filter((w) => w.id !== workflowId));
-      alert(`Workflow "${workflow.name}" deleted`);
+      const response = await fetch(`http://localhost:5000/workflow/${workflow.name}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete workflow");
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert(`Workflow "${workflow.name}" deleted successfully`);
+        await fetchWorkflows();
+      } else {
+        throw new Error(data.error || "Delete failed");
+      }
     } catch (error) {
       console.error("Failed to delete workflow:", error);
       alert(`Error deleting workflow: ${error.message}`);
-      await fetchWorkflows();
     }
   };
 
