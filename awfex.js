@@ -1,3 +1,6 @@
+import { config } from "dotenv";
+config();
+
 import add from "./functions/add.js";
 import sub from "./functions/sub.js";
 import mul from "./functions/mul.js";
@@ -21,12 +24,22 @@ function convertIfNumeric(str) {
   }
 }
 
+function resolveSpecial(value, ctx) {
+  if (typeof value !== "string") return value;
+  if (value.startsWith("$query:")) {
+    const key = value.split(":")[1];
+    return convertIfNumeric(ctx[key]);
+  }
+  if (value.startsWith("$env:")) {
+    const key = value.split(":")[1];
+    return process.env[key];
+  }
+  return value;
+}
+
 export function engine(node, ctx) {
   if (typeof node === "number" || typeof node === "string") { 
-    if(typeof node === "string" && node.startsWith("$query:")){ 
-      return convertIfNumeric(ctx[node.split(":")[1]]); 
-    } 
-    return node; 
+    return resolveSpecial(node, ctx); 
   }
   if (Array.isArray(node)) {
     return node.map(n => engine(n, ctx));

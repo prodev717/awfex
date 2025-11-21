@@ -118,95 +118,127 @@
 
   <!-- API Documentation -->
   <div class="docs">
-    <h2>API Endpoints</h2>
+  <h2>API Endpoints</h2>
 
-    <div class="endpoint">
-      <span class="method">POST</span>
-      <code>/workflow</code>
-      <div>Saves or updates a workflow.</div>
-      <pre>{
+  <div class="endpoint">
+    <span class="method">POST</span>
+    <code>/workflow</code>
+    <div>Saves or updates a workflow.</div>
+    <pre>{
   "name": "mathFlow",
   "workflow": { "mul": [{ "add": [2, 3] }, 4] }
 }</pre>
+  </div>
+
+  <div class="endpoint">
+    <span class="method">GET</span>
+    <code>/workflow/:name</code>
+    <div>Retrieve workflow JSON by name.</div>
+  </div>
+
+  <div class="endpoint">
+    <span class="method">GET</span>
+    <code>/workflow</code>
+    <div>List all workflow names.</div>
+  </div>
+
+  <div class="endpoint">
+    <span class="method">DELETE</span>
+    <code>/workflow/:name</code>
+    <div>Deletes a workflow by name.</div>
+    <pre>DELETE /workflow/userSignupFlow</pre>
+  </div>
+
+  <div class="endpoint">
+    <span class="method">GET</span>
+    <code>/run/:name</code>
+    <div>
+      Runs a workflow stored in the database.<br>
+      <b>Supports query parameters and environment values.</b>
     </div>
+    <pre>GET /run/mathFlow?x=10&y=20</pre>
+  </div>
 
-    <div class="endpoint">
-      <span class="method">GET</span>
-      <code>/workflow/:name</code>
-      <div>Retrieve workflow JSON by name.</div>
+  <div class="endpoint">
+    <span class="method">POST</span>
+    <code>/run</code>
+    <div>
+      Runs a workflow sent directly in the POST body.<br>
+      Accepts query parameters and environment lookups.
     </div>
-
-    <div class="endpoint">
-      <span class="method">GET</span>
-      <code>/workflow</code>
-      <div>List all workflow names.</div>
-    </div>
-
-    <div class="endpoint">
-      <span class="method">GET</span>
-      <code>/run/:name</code>
-      <div>
-        Runs a workflow stored in the database.  
-        <b>Supports query parameters.</b>
-      </div>
-      <pre>GET /run/mathFlow?x=10&y=20</pre>
-
-      <b>Example Workflow Using Query Params:</b>
-      <pre>{
-  "mul": ["$query:x", "$query:y"]
-}</pre>
-
-      <b>Example Output:</b>
-      <pre>200</pre>
-    </div>
-
-    <div class="endpoint">
-      <span class="method">POST</span>
-      <code>/run</code>
-      <div>
-        Runs a workflow sent directly in the POST body.  
-        <b>Also supports query parameters.</b>
-      </div>
-      <pre>POST /run?x=5
+    <pre>POST /run?x=5
 {
   "add": ["$query:x", 3]
 }</pre>
+  </div>
 
-      <b>Output:</b>
-      <pre>8</pre>
-    </div>
+  <div class="endpoint">
+    <span class="method">GET</span>
+    <code>/functions</code>
+    <div>Returns a list of available functions.</div>
+  </div>
 
-    <div class="endpoint">
-      <span class="method">GET</span>
-      <code>/functions</code>
-      <div>Returns a list of available functions.</div>
-    </div>
+  <hr style="margin:20px 0;">
 
-    <hr style="margin:20px 0;">
+  <h2>Special Value Types</h2>
 
-    <!-- NEW DOCUMENTATION FOR QUERY PARAM HANDLING -->
-    <h2>Using Query Parameters in Workflows</h2>
+  <div class="endpoint">
+    <h3>1. Using Query Parameters — <code>$query:</code></h3>
+    <div>You can inject query string values into any workflow.</div>
 
-    <div class="endpoint">
-      <div>
-        You can pass query parameters into any workflow (saved or inline)  
-        using the special syntax:
-      </div>
+    <pre>"$query:key"</pre>
 
-      <pre>"$query:key"</pre>
-
-      <b>Example:</b>
-      <pre>{
+    <b>Example:</b>
+    <pre>{
   "add": ["$query:a", "$query:b"]
+}
+
+GET /run? a=7 & b=5
+→ 12
+</pre>
+  </div>
+
+  <div class="endpoint">
+    <h3>2. Using Environment Variables — <code>$env:</code></h3>
+    <div>
+      Reads values directly from your <code>.env</code> file using:
+    </div>
+
+    <pre>"$env:VARIABLE_NAME"</pre>
+
+    <b>Example .env:</b>
+    <pre>SECRET_KEY=12345</pre>
+
+    <b>Example Workflow:</b>
+    <pre>{
+  "print": ["$env:SECRET_KEY"]
 }</pre>
 
-      <b>Request:</b>
-      <pre>/run? a=7 & b=5</pre>
+    <b>Output:</b>
+    <pre>12345</pre>
 
-      <b>Result:</b>
-      <pre>12</pre>
+    <div>
+      Values are substituted at runtime using <code>process.env</code>.
     </div>
   </div>
+
+  <div class="endpoint">
+    <h3>3. Number Auto-Detection</h3>
+    <div>
+      Query parameters like <code>?x=10</code> automatically become numbers.<br>
+      Non-numeric values remain strings:
+    </div>
+
+    <pre>{
+  "add": ["$query:x", 5]
+}
+
+GET /run?x=10 → 15
+GET /run?x=hello → "hello5" (string concatenation)
+</pre>
+  </div>
+</div>
+
 
   <!-- JavaScript -->
   <script>
