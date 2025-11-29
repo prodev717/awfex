@@ -1,93 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AWFEX Workflow Tester</title>
-
+  <title>AWFEX | Workflow Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background: #f9fafb;
-      color: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
+      background-color: #020617;
     }
-    h1 {
-      margin-bottom: 20px;
+
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
     }
-    textarea {
-      width: 600px;
-      height: 300px;
-      font-family: monospace;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      resize: none;
-      outline: none;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px 25px;
-      border: none;
-      background-color: #2563eb;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover {
-      background-color: #1d4ed8;
-    }
-    pre {
-      background: #111;
-      color: #0f0;
-      width: 600px;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    input {
-      font-size: 14px;
-    }
-    .docs {
-      margin-top: 40px;
-      width: 600px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-    }
-    .docs h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-    .endpoint {
-      margin-bottom: 15px;
-    }
-    .endpoint code {
-      background: #f3f4f6;
-      padding: 3px 6px;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    .method {
-      font-weight: bold;
-      color: #2563eb;
+
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
 
-<body>
-  <h1>AWFEX - Workflow Engine Tester</h1>
+<body class="text-slate-300 antialiased min-h-screen flex flex-col">
 
-  <!-- Workflow JSON Input -->
-  <textarea id="jsonInput">{
+  <!-- Navbar -->
+  <nav class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z">
+              </path>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-white tracking-tight">AWFEX</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="#tester" class="text-sm font-medium hover:text-white transition-colors">Tester</a>
+          <a href="#docs" class="text-sm font-medium hover:text-white transition-colors">Documentation</a>
+          <a href="http://localhost:5173" target="_blank"
+            class="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
+            Open Designer <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full grid lg:grid-cols-2 gap-12">
+
+    <!-- Left Column: Tester -->
+    <section id="tester" class="flex flex-col gap-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-2">Workflow Tester</h2>
+        <p class="text-slate-400">Test your JSON workflows directly against the engine.</p>
+      </div>
+
+      <div
+        class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl shadow-black/50 flex flex-col h-[600px]">
+        <!-- Editor Header -->
+        <div class="bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+          <span class="text-xs font-mono text-slate-400">workflow.json</span>
+          <div class="flex gap-2">
+            <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+          </div>
+        </div>
+
+        <!-- Editor Body -->
+        <div class="flex-1 relative group">
+          <textarea id="jsonInput"
+            class="w-full h-full bg-slate-900 p-4 font-mono text-sm text-blue-100 focus:outline-none resize-none selection:bg-blue-500/30"
+            spellcheck="false">{
   "print": [
     {
       "sub": [
@@ -99,163 +112,190 @@
     }
   ]
 }</textarea>
+        </div>
 
-  <!-- Query Params Input -->
-  <div style="margin-top:20px; width:600px;">
-    <label><b>Query Params</b> (optional):</label>
-    <input
-      id="queryInput"
-      value="x=3"
-      style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:6px;"
-    />
-  </div>
+        <!-- Controls -->
+        <div class="bg-slate-950 border-t border-slate-800 p-4 flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Query Params</label>
+            <input id="queryInput" value="x=10"
+              class="flex-1 bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm font-mono text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors"
+              placeholder="key=value&foo=bar">
+          </div>
 
-  <!-- Run Button -->
-  <button onclick="runWorkflow()">Run Workflow</button>
+          <button onclick="runWorkflow()"
+            class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+              </path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Run Workflow
+          </button>
+        </div>
+      </div>
 
-  <!-- Output -->
-  <pre id="output">Result will appear here...</pre>
+      <!-- Output -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+        <div class="bg-slate-950 border-b border-slate-800 px-4 py-2 flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Output</span>
+          <button onclick="document.getElementById('output').textContent='Ready...'"
+            class="text-xs text-slate-500 hover:text-slate-300">Clear</button>
+        </div>
+        <pre id="output" class="p-4 font-mono text-sm text-green-400 overflow-x-auto whitespace-pre-wrap">Ready...</pre>
+      </div>
+    </section>
 
-  <!-- API Documentation -->
-  <div class="docs">
-  <h2>API Endpoints</h2>
+    <!-- Right Column: Documentation -->
+    <section id="docs" class="flex flex-col gap-8">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-2">API Documentation</h2>
+        <p class="text-slate-400">Complete reference for the AWFEX API endpoints.</p>
+      </div>
 
-  <div class="endpoint">
-    <span class="method">POST</span>
-    <code>/workflow</code>
-    <div>Saves or updates a workflow.</div>
-    <pre>{
-  "name": "mathFlow",
-  "workflow": { "mul": [{ "add": [2, 3] }, 4] }
+      <div class="space-y-6">
+
+        <!-- Endpoint Card: List Workflows -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+            <code class="text-sm font-mono text-slate-200">/workflow</code>
+          </div>
+          <p class="text-sm text-slate-400">Returns a list of all saved workflow names.</p>
+        </div>
+
+        <!-- Endpoint Card: Save Workflow -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">POST</span>
+            <code class="text-sm font-mono text-slate-200">/workflow</code>
+          </div>
+          <p class="text-sm text-slate-400 mb-3">Saves or updates a workflow definition.</p>
+          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+            <pre class="text-xs font-mono text-slate-300">{
+  <span class="text-purple-400">"name"</span>: <span class="text-green-400">"mathFlow"</span>,
+  <span class="text-purple-400">"workflow"</span>: { <span class="text-purple-400">"mul"</span>: [{ <span class="text-purple-400">"add"</span>: [<span class="text-orange-400">2</span>, <span class="text-orange-400">3</span>] }, <span class="text-orange-400">4</span>] }
 }</pre>
-  </div>
+          </div>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">GET</span>
-    <code>/workflow/:name</code>
-    <div>Retrieve workflow JSON by name.</div>
-  </div>
+        <!-- Endpoint Card: Get Workflow -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+            <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
+          </div>
+          <p class="text-sm text-slate-400">Retrieve a workflow definition by its name.</p>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">GET</span>
-    <code>/workflow</code>
-    <div>List all workflow names.</div>
-  </div>
+        <!-- Endpoint Card: Delete Workflow -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">DELETE</span>
+            <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
+          </div>
+          <p class="text-sm text-slate-400">Permanently delete a workflow.</p>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">DELETE</span>
-    <code>/workflow/:name</code>
-    <div>Deletes a workflow by name.</div>
-    <pre>DELETE /workflow/userSignupFlow</pre>
-  </div>
+        <!-- Endpoint Card: Run Stored Workflow -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+            <code class="text-sm font-mono text-slate-200">/run/:name</code>
+          </div>
+          <p class="text-sm text-slate-400 mb-3">Execute a stored workflow. Supports query params.</p>
+          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+            <pre class="text-xs font-mono text-slate-300">GET /run/mathFlow?x=10&y=20</pre>
+          </div>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">GET</span>
-    <code>/run/:name</code>
-    <div>
-      Runs a workflow stored in the database.<br>
-      <b>Supports query parameters and environment values.</b>
-    </div>
-    <pre>GET /run/mathFlow?x=10&y=20</pre>
-  </div>
-
-  <div class="endpoint">
-    <span class="method">POST</span>
-    <code>/run</code>
-    <div>
-      Runs a workflow sent directly in the POST body.<br>
-      Accepts query parameters and environment lookups.
-    </div>
-    <pre>POST /run?x=5
+        <!-- Endpoint Card: Run Ad-hoc Workflow -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">POST</span>
+            <code class="text-sm font-mono text-slate-200">/run</code>
+          </div>
+          <p class="text-sm text-slate-400 mb-3">Execute a workflow immediately. Supports query params.</p>
+          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+            <pre class="text-xs font-mono text-slate-300">POST /run?x=5
 {
-  "add": ["$query:x", 3]
+  <span class="text-purple-400">"add"</span>: [<span class="text-green-400">"$query:x"</span>, <span class="text-orange-400">3</span>]
 }</pre>
-  </div>
+          </div>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">GET</span>
-    <code>/functions</code>
-    <div>Returns a list of available functions.</div>
-  </div>
+        <!-- Endpoint Card: List Functions -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+            <code class="text-sm font-mono text-slate-200">/functions</code>
+          </div>
+          <p class="text-sm text-slate-400">Returns a list of all available function names.</p>
+        </div>
 
-  <div class="endpoint">
-    <span class="method">GET</span>
-    <code>/descriptions</code>
-    <div>Returns a Object of available functions as key and its description as value.</div>
-  </div>
+        <!-- Endpoint Card: Function Descriptions -->
+        <div class="group">
+          <div class="flex items-center gap-3 mb-2">
+            <span
+              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+            <code class="text-sm font-mono text-slate-200">/descriptions</code>
+          </div>
+          <p class="text-sm text-slate-400">Returns a map of functions and their descriptions/tooltips.</p>
+        </div>
 
-  <hr style="margin:20px 0;">
+        <div class="h-px bg-slate-800 my-4"></div>
 
-  <h2>Special Value Types</h2>
+        <div>
+          <h3 class="text-lg font-bold text-white mb-4">Special Values</h3>
 
-  <div class="endpoint">
-    <h3>1. Using Query Parameters — <code>$query:</code></h3>
-    <div>You can inject query string values into any workflow.</div>
+          <div class="grid gap-4">
+            <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
+              <code class="text-sm font-bold text-yellow-400">$query:key</code>
+              <p class="text-sm text-slate-400 mt-1">Injects values from URL query parameters.</p>
+            </div>
 
-    <pre>"$query:key"</pre>
+            <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
+              <code class="text-sm font-bold text-pink-400">$env:KEY</code>
+              <p class="text-sm text-slate-400 mt-1">Injects server-side environment variables.</p>
+            </div>
+          </div>
+        </div>
 
-    <b>Example:</b>
-    <pre>{
-  "add": ["$query:a", "$query:b"]
-}
+      </div>
+    </section>
 
-GET /run? a=7 & b=5
-→ 12
-</pre>
-  </div>
+  </main>
 
-  <div class="endpoint">
-    <h3>2. Using Environment Variables — <code>$env:</code></h3>
-    <div>
-      Reads values directly from your <code>.env</code> file using:
+  <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+      <p>&copy; 2024 AWFEX. Open Source Automation Engine.</p>
     </div>
+  </footer>
 
-    <pre>"$env:VARIABLE_NAME"</pre>
-
-    <b>Example .env:</b>
-    <pre>SECRET_KEY=12345</pre>
-
-    <b>Example Workflow:</b>
-    <pre>{
-  "print": ["$env:SECRET_KEY"]
-}</pre>
-
-    <b>Output:</b>
-    <pre>12345</pre>
-
-    <div>
-      Values are substituted at runtime using <code>process.env</code>.
-    </div>
-  </div>
-
-  <div class="endpoint">
-    <h3>3. Number Auto-Detection</h3>
-    <div>
-      Query parameters like <code>?x=10</code> automatically become numbers.<br>
-      Non-numeric values remain strings:
-    </div>
-
-    <pre>{
-  "add": ["$query:x", 5]
-}
-
-GET /run?x=10 → 15
-GET /run?x=hello → "hello5" (string concatenation)
-</pre>
-  </div>
-</div>
-
-
-  <!-- JavaScript -->
   <script>
     async function runWorkflow() {
       const input = document.getElementById("jsonInput").value;
       const output = document.getElementById("output");
       const query = document.getElementById("queryInput").value.trim();
+      const btn = document.querySelector('button[onclick="runWorkflow()"]');
 
       const url = query ? `/run?${query}` : `/run`;
 
       output.textContent = "Running...";
+      output.classList.remove("text-red-400");
+      output.classList.add("text-green-400");
+
+      btn.disabled = true;
+      btn.classList.add("opacity-75", "cursor-not-allowed");
 
       try {
         const res = await fetch(url, {
@@ -267,11 +307,21 @@ GET /run?x=hello → "hello5" (string concatenation)
         const data = await res.json();
         output.textContent = JSON.stringify(data, null, 2);
 
+        if (!data.success && data.error) {
+          output.classList.remove("text-green-400");
+          output.classList.add("text-red-400");
+        }
+
       } catch (err) {
         output.textContent = "Error: " + err.message;
+        output.classList.remove("text-green-400");
+        output.classList.add("text-red-400");
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove("opacity-75", "cursor-not-allowed");
       }
     }
   </script>
-
 </body>
+
 </html>
