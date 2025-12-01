@@ -7,6 +7,10 @@ import { mul, mulDescription } from "./functions/mul.js";
 import { div, divDescription } from "./functions/div.js";
 import { print, printDescription } from "./functions/print.js";
 import { gemini, geminiDescription } from "./functions/gemini.js";
+import { wait, waitDescription } from "./functions/wait.js";
+import { jsonParse, jsonParseDescription } from "./functions/jsonParse.js";
+import { jsonStringify, jsonStringifyDescription } from "./functions/jsonStringify.js";
+import { httpRequest, httpRequestDescription } from "./functions/httpRequest.js";
 
 export const FUNCTIONS = {
   add: add,
@@ -14,7 +18,11 @@ export const FUNCTIONS = {
   mul: mul,
   div: div,
   print: print,
-  gemini: gemini
+  gemini: gemini,
+  wait: wait,
+  jsonParse: jsonParse,
+  jsonStringify: jsonStringify,
+  httpRequest: httpRequest
 };
 
 export const DESCRIPTIONS = {
@@ -23,7 +31,11 @@ export const DESCRIPTIONS = {
   mul: mulDescription,
   div: divDescription,
   print: printDescription,
-  gemini: geminiDescription
+  gemini: geminiDescription,
+  wait: waitDescription,
+  jsonParse: jsonParseDescription,
+  jsonStringify: jsonStringifyDescription,
+  httpRequest: httpRequestDescription
 };
 
 function convertIfNumeric(str) {

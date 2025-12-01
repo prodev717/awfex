@@ -9,6 +9,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -29,6 +30,7 @@
       }
     }
   </script>
+
   <style>
     body {
       background-color: #020617;
@@ -75,9 +77,10 @@
     </div>
   </nav>
 
+  <!-- Main Layout -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full grid lg:grid-cols-2 gap-12">
 
-    <!-- Left Column: Tester -->
+    <!-- Left Section: Workflow Tester -->
     <section id="tester" class="flex flex-col gap-6">
       <div>
         <h2 class="text-2xl font-bold text-white mb-2">Workflow Tester</h2>
@@ -85,7 +88,8 @@
       </div>
 
       <div
-        class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl shadow-black/50 flex flex-col h-[600px]">
+        class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl shadow-black/50 flex flex-col h-[650px]">
+
         <!-- Editor Header -->
         <div class="bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
           <span class="text-xs font-mono text-slate-400">workflow.json</span>
@@ -96,7 +100,7 @@
           </div>
         </div>
 
-        <!-- Editor Body -->
+        <!-- Editor -->
         <div class="flex-1 relative group">
           <textarea id="jsonInput"
             class="w-full h-full bg-slate-900 p-4 font-mono text-sm text-blue-100 focus:outline-none resize-none selection:bg-blue-500/30"
@@ -116,6 +120,16 @@
 
         <!-- Controls -->
         <div class="bg-slate-950 border-t border-slate-800 p-4 flex flex-col gap-4">
+
+          <!-- API Key -->
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">API Key</label>
+            <input id="apiKeyInput" value="supersecret"
+              class="flex-1 bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm font-mono text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors"
+              placeholder="Enter API Key (required for protected routes)">
+          </div>
+
+          <!-- Query Params -->
           <div class="flex items-center gap-3">
             <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Query Params</label>
             <input id="queryInput" value="x=10"
@@ -148,144 +162,179 @@
       </div>
     </section>
 
-    <!-- Right Column: Documentation -->
+    <!-- Right Section: API Docs -->
     <section id="docs" class="flex flex-col gap-8">
       <div>
         <h2 class="text-2xl font-bold text-white mb-2">API Documentation</h2>
         <p class="text-slate-400">Complete reference for the AWFEX API endpoints.</p>
       </div>
 
-      <div class="space-y-6">
+      <!-- Auth + Rate Limits -->
+      <div class="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
+        <h3 class="text-lg font-bold text-white mb-2">Authentication & Rate Limits</h3>
 
-        <!-- Endpoint Card: List Workflows -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
-            <code class="text-sm font-mono text-slate-200">/workflow</code>
-          </div>
-          <p class="text-sm text-slate-400">Returns a list of all saved workflow names.</p>
+        <p class="text-sm text-slate-400 mb-3">
+          AWFEX uses API Key authentication. Include it in:
+        </p>
+
+        <pre class="text-xs font-mono bg-slate-950 p-3 rounded border border-slate-800 text-blue-400">
+x-api-key: YOUR_API_KEY
+        </pre>
+
+        <p class="text-sm text-slate-400 mt-3">Rate Limits:</p>
+        <ul class="text-sm text-slate-400 list-disc ml-5 mt-1">
+          <li>100 requests per 15 minutes per IP</li>
+          <li>Exceeded limit returns <code class="text-red-400">429 Too Many Requests</code></li>
+        </ul>
+      </div>
+
+      <!-- GET /workflow -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/workflow</code>
         </div>
+        <p class="text-sm text-slate-400">Returns a list of all saved workflow names.</p>
+      </div>
 
-        <!-- Endpoint Card: Save Workflow -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">POST</span>
-            <code class="text-sm font-mono text-slate-200">/workflow</code>
-          </div>
-          <p class="text-sm text-slate-400 mb-3">Saves or updates a workflow definition.</p>
-          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
-            <pre class="text-xs font-mono text-slate-300">{
-  <span class="text-purple-400">"name"</span>: <span class="text-green-400">"mathFlow"</span>,
-  <span class="text-purple-400">"workflow"</span>: { <span class="text-purple-400">"mul"</span>: [{ <span class="text-purple-400">"add"</span>: [<span class="text-orange-400">2</span>, <span class="text-orange-400">3</span>] }, <span class="text-orange-400">4</span>] }
+      <!-- POST /workflow -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20">POST</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/workflow</code>
+        </div>
+        <p class="text-sm text-slate-400 mb-3">Save or update a workflow.</p>
+        <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+          <pre class="text-xs font-mono text-slate-300">{
+  "name": "mathFlow",
+  "workflow": { "mul": [{ "add": [2, 3] }, 4] }
 }</pre>
-          </div>
         </div>
+      </div>
 
-        <!-- Endpoint Card: Get Workflow -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
-            <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
-          </div>
-          <p class="text-sm text-slate-400">Retrieve a workflow definition by its name.</p>
+      <!-- GET /workflow/:name -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
         </div>
+        <p class="text-sm text-slate-400">Retrieve a workflow.</p>
+      </div>
 
-        <!-- Endpoint Card: Delete Workflow -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">DELETE</span>
-            <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
-          </div>
-          <p class="text-sm text-slate-400">Permanently delete a workflow.</p>
+      <!-- DELETE /workflow/:name -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">DELETE</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/workflow/:name</code>
         </div>
+        <p class="text-sm text-slate-400">Delete a workflow.</p>
+      </div>
 
-        <!-- Endpoint Card: Run Stored Workflow -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
-            <code class="text-sm font-mono text-slate-200">/run/:name</code>
-          </div>
-          <p class="text-sm text-slate-400 mb-3">Execute a stored workflow. Supports query params.</p>
-          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
-            <pre class="text-xs font-mono text-slate-300">GET /run/mathFlow?x=10&y=20</pre>
-          </div>
+      <!-- GET /run/:name -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/run/:name</code>
         </div>
+        <p class="text-sm text-slate-400 mb-3">Run a workflow by name.</p>
+        <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+          <pre class="text-xs font-mono text-slate-300">GET /run/mathFlow?x=10
+Headers:
+  x-api-key: YOUR_API_KEY</pre>
+        </div>
+      </div>
 
-        <!-- Endpoint Card: Run Ad-hoc Workflow -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">POST</span>
-            <code class="text-sm font-mono text-slate-200">/run</code>
-          </div>
-          <p class="text-sm text-slate-400 mb-3">Execute a workflow immediately. Supports query params.</p>
-          <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
-            <pre class="text-xs font-mono text-slate-300">POST /run?x=5
+      <!-- POST /run -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">POST</span>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">AUTH
+            REQUIRED</span>
+          <code class="text-sm font-mono text-slate-200">/run</code>
+        </div>
+        <p class="text-sm text-slate-400 mb-3">Execute an inline workflow with optional query params.</p>
+        <div class="bg-slate-900 rounded-lg border border-slate-800 p-3 overflow-x-auto">
+          <pre class="text-xs font-mono text-slate-300">POST /run?x=5
+Headers:
+  x-api-key: YOUR_API_KEY
+
 {
-  <span class="text-purple-400">"add"</span>: [<span class="text-green-400">"$query:x"</span>, <span class="text-orange-400">3</span>]
+  "add": ["$query:x", 3]
 }</pre>
+        </div>
+      </div>
+
+      <!-- GET /functions -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+          <code class="text-sm font-mono text-slate-200">/functions</code>
+        </div>
+        <p class="text-sm text-slate-400">List available functions.</p>
+      </div>
+
+      <!-- GET /descriptions -->
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
+          <code class="text-sm font-mono text-slate-200">/descriptions</code>
+        </div>
+        <p class="text-sm text-slate-400">Function descriptions and tooltips.</p>
+      </div>
+
+      <div class="h-px bg-slate-800 my-4"></div>
+
+      <div>
+        <h3 class="text-lg font-bold text-white mb-4">Special Values</h3>
+
+        <div class="grid gap-4">
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
+            <code class="text-sm font-bold text-yellow-400">$query:key</code>
+            <p class="text-sm text-slate-400 mt-1">Injects URL query parameters.</p>
+          </div>
+
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
+            <code class="text-sm font-bold text-pink-400">$env:KEY</code>
+            <p class="text-sm text-slate-400 mt-1">Injects server-side environment variables.</p>
           </div>
         </div>
-
-        <!-- Endpoint Card: List Functions -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
-            <code class="text-sm font-mono text-slate-200">/functions</code>
-          </div>
-          <p class="text-sm text-slate-400">Returns a list of all available function names.</p>
-        </div>
-
-        <!-- Endpoint Card: Function Descriptions -->
-        <div class="group">
-          <div class="flex items-center gap-3 mb-2">
-            <span
-              class="px-2 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">GET</span>
-            <code class="text-sm font-mono text-slate-200">/descriptions</code>
-          </div>
-          <p class="text-sm text-slate-400">Returns a map of functions and their descriptions/tooltips.</p>
-        </div>
-
-        <div class="h-px bg-slate-800 my-4"></div>
-
-        <div>
-          <h3 class="text-lg font-bold text-white mb-4">Special Values</h3>
-
-          <div class="grid gap-4">
-            <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
-              <code class="text-sm font-bold text-yellow-400">$query:key</code>
-              <p class="text-sm text-slate-400 mt-1">Injects values from URL query parameters.</p>
-            </div>
-
-            <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-4">
-              <code class="text-sm font-bold text-pink-400">$env:KEY</code>
-              <p class="text-sm text-slate-400 mt-1">Injects server-side environment variables.</p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
 
   </main>
 
+  <!-- Footer -->
   <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-auto">
     <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
       <p>&copy; 2024 AWFEX. Open Source Automation Engine.</p>
     </div>
   </footer>
 
+  <!-- JS -->
   <script>
     async function runWorkflow() {
       const input = document.getElementById("jsonInput").value;
       const output = document.getElementById("output");
       const query = document.getElementById("queryInput").value.trim();
+      const apiKey = document.getElementById("apiKeyInput").value.trim();
       const btn = document.querySelector('button[onclick="runWorkflow()"]');
 
       const url = query ? `/run?${query}` : `/run`;
@@ -300,7 +349,10 @@
       try {
         const res = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey
+          },
           body: input
         });
 
@@ -322,6 +374,7 @@
       }
     }
   </script>
+
 </body>
 
 </html>

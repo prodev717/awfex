@@ -23,7 +23,7 @@ export default function InputNode({ id, data }) {
     <div className="relative group">
       {/* Tooltip */}
       <div className="absolute -top-[38px] left-1/2 -translate-x-1/2 bg-slate-800 text-white px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap pointer-events-none opacity-0 transition-opacity duration-200 z-50 shadow-xl border border-slate-700 group-hover:opacity-100">
-        This node is used to give inputs to the other function nodes
+        This node is used to give inputs to the other function nodes. It always outputs a string.
       </div>
 
       <div
@@ -59,8 +59,8 @@ export default function InputNode({ id, data }) {
 
           <div
             className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wide ${isEmpty
-                ? "text-slate-400 bg-slate-700/50 border-slate-600"
-                : "text-blue-300 bg-blue-500/10 border-blue-500/20"
+              ? "text-slate-400 bg-slate-700/50 border-slate-600"
+              : "text-blue-300 bg-blue-500/10 border-blue-500/20"
               }`}
           >
             {isEmpty ? "Empty" : "Set"}
