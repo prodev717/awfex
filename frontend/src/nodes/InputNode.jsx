@@ -20,107 +20,26 @@ export default function InputNode({ id, data }) {
     data.value === "" || data.value === null || data.value === undefined;
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative group">
       {/* Tooltip */}
-      <div
-        className="input-node-tooltip"
-        style={{
-          position: "absolute",
-          top: "-38px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: "#1e293b",
-          color: "white",
-          padding: "6px 10px",
-          borderRadius: "6px",
-          fontSize: "11px",
-          fontWeight: "500",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          opacity: 0,
-          transition: "opacity 200ms ease",
-          zIndex: 50,
-        }}
-      >
+      <div className="absolute -top-[38px] left-1/2 -translate-x-1/2 bg-slate-800 text-white px-2.5 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap pointer-events-none opacity-0 transition-opacity duration-200 z-50 shadow-xl border border-slate-700 group-hover:opacity-100">
         This node is used to give inputs to the other function nodes
       </div>
 
       <div
         role="group"
         aria-label={`input-node-${id}`}
-        style={{
-          position: "relative",
-          width: "260px",
-          background: "#ffffff",
-          border: "1.5px solid #e2e8f0",
-          borderRadius: "8px",
-          padding: "12px 14px",
-          boxShadow:
-            "0 2px 4px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.04)",
-          transition: "border-color 200ms ease, box-shadow 200ms ease",
-          userSelect: "none",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow =
-            "0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.08), 0 16px 32px rgba(59, 130, 246, 0.06)";
-          e.currentTarget.style.borderColor = "#bfdbfe";
-
-          const tooltip = e.currentTarget.parentElement.querySelector(
-            ".input-node-tooltip"
-          );
-          tooltip.style.opacity = 1;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow =
-            "0 2px 4px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.04)";
-          e.currentTarget.style.borderColor = "#e2e8f0";
-
-          const tooltip = e.currentTarget.parentElement.querySelector(
-            ".input-node-tooltip"
-          );
-          tooltip.style.opacity = 0;
-        }}
+        className="relative w-[260px] bg-slate-800 border border-slate-700 rounded-xl p-3.5 shadow-lg transition-all duration-200 select-none hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-400/50"
       >
         {/* Accent bar */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "3px",
-            background: "linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%)",
-            borderRadius: "8px 8px 0 0",
-          }}
-        />
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-400 to-indigo-500 rounded-t-xl" />
 
         {/* Delete button */}
         <button
           onClick={handleDelete}
           title="Delete node"
           aria-label={`delete-${id}`}
-          style={{
-            position: "absolute",
-            top: "-10px",
-            right: "-10px",
-            background: "#ef4444",
-            color: "white",
-            border: "none",
-            width: "28px",
-            height: "28px",
-            borderRadius: "50%",
-            boxShadow: "0 2px 8px rgba(239, 68, 68, 0.3)",
-            display: "grid",
-            placeItems: "center",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "700",
-            transition: "opacity 200ms ease",
-            zIndex: 20,
-            opacity: 0.95,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.95")}
+          className="absolute -top-2.5 -right-2.5 bg-red-500 text-white border-none w-7 h-7 rounded-full shadow-md shadow-red-500/30 grid place-items-center cursor-pointer text-base font-bold transition-opacity duration-200 z-20 opacity-0 group-hover:opacity-100 hover:bg-red-600"
         >
           ×
         </button>
@@ -129,40 +48,20 @@ export default function InputNode({ id, data }) {
         <Handle
           type="target"
           position={Position.Top}
-          style={{
-            background: "#3b82f6",
-            border: "3px solid white",
-            width: "10px",
-            height: "10px",
-            boxShadow: "0 2px 6px rgba(59, 130, 246, 0.3)",
-          }}
+          className="!bg-blue-500 !border-[3px] !border-slate-800 !w-2.5 !h-2.5 !shadow-lg !shadow-blue-500/50"
         />
 
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "10px",
-          }}
-        >
-          <div style={{ fontWeight: "700", fontSize: "13px", color: "#0f172a" }}>
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="font-bold text-[13px] text-slate-100">
             Input
           </div>
 
           <div
-            style={{
-              fontSize: "10px",
-              fontWeight: "700",
-              color: isEmpty ? "#94a3b8" : "#3b82f6",
-              background: isEmpty ? "#f8fafc" : "#eff6ff",
-              padding: "3px 8px",
-              borderRadius: "4px",
-              border: `1px solid ${isEmpty ? "#e2e8f0" : "#dbeafe"}`,
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-            }}
+            className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wide ${isEmpty
+                ? "text-slate-400 bg-slate-700/50 border-slate-600"
+                : "text-blue-300 bg-blue-500/10 border-blue-500/20"
+              }`}
           >
             {isEmpty ? "Empty" : "Set"}
           </div>
@@ -170,94 +69,26 @@ export default function InputNode({ id, data }) {
 
         {/* Preview value */}
         {!isEmpty && (
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: "600",
-              color: "#1e293b",
-              background: "#f8fafc",
-              padding: "6px 8px",
-              borderRadius: "4px",
-              marginBottom: "8px",
-              border: "1px solid #e2e8f0",
-              fontFamily: "monospace",
-              whiteSpace: "pre-wrap",
-              maxHeight: "120px",
-              overflowY: "auto",
-            }}
-          >
+          <div className="text-xs font-semibold text-slate-300 bg-slate-900/50 p-2 rounded border border-slate-700 mb-2 font-mono whitespace-pre-wrap max-h-[120px] overflow-y-auto scrollable">
             {String(data.value)}
           </div>
         )}
 
         {/* Textarea field */}
-        <div style={{ display: "flex", gap: "6px", alignItems: "stretch" }}>
+        <div className="flex gap-1.5 items-stretch">
           <textarea
             aria-label={`input-value-${id}`}
             value={data.value ?? ""}
             onChange={handleChange}
             placeholder="Type here..."
-            style={{
-              flex: 1,
-              minHeight: "80px",
-              padding: "10px",
-              borderRadius: "6px",
-              border: "1.5px solid #e2e8f0",
-              outline: "none",
-              fontSize: "13px",
-              fontWeight: "500",
-              background: "#fafbfc",
-              transition:
-                "border-color 200ms ease, background 200ms ease, box-shadow 200ms ease",
-              color: "#1e293b",
-              resize: "both",
-              overflow: "auto",
-              whiteSpace: "pre-wrap",
-              fontFamily: "monospace",
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = "#3b82f6";
-              e.currentTarget.style.background = "#ffffff";
-              e.currentTarget.style.boxShadow =
-                "0 0 0 3px rgba(59, 130, 246, 0.08)";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = "#e2e8f0";
-              e.currentTarget.style.background = "#fafbfc";
-              e.currentTarget.style.boxShadow = "none";
-            }}
+            className="flex-1 min-h-[80px] p-2.5 rounded-md border border-slate-700 outline-none text-[13px] font-medium bg-slate-900 text-slate-200 resize-both overflow-auto whitespace-pre-wrap font-mono transition-all focus:border-blue-500 focus:bg-slate-950 focus:ring-1 focus:ring-blue-500/50"
           />
 
           <button
             onClick={handleClear}
             title="Clear value"
             aria-label={`clear-${id}`}
-            style={{
-              border: "1.5px solid #e2e8f0",
-              background: "#fafbfc",
-              cursor: "pointer",
-              fontSize: "16px",
-              width: "36px",
-              height: "36px",
-              borderRadius: "6px",
-              display: "grid",
-              placeItems: "center",
-              color: "#64748b",
-              transition:
-                "background 200ms ease, color 200ms ease, border-color 200ms ease",
-              fontWeight: "700",
-              alignSelf: "flex-start",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#3b82f6";
-              e.currentTarget.style.color = "white";
-              e.currentTarget.style.borderColor = "#3b82f6";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#fafbfc";
-              e.currentTarget.style.color = "#64748b";
-              e.currentTarget.style.borderColor = "#e2e8f0";
-            }}
+            className="border border-slate-700 bg-slate-900 cursor-pointer text-base w-9 h-9 rounded-md grid place-items-center text-slate-400 transition-all font-bold self-start hover:bg-blue-600 hover:text-white hover:border-blue-500"
           >
             ↻
           </button>
@@ -267,13 +98,7 @@ export default function InputNode({ id, data }) {
         <Handle
           type="source"
           position={Position.Bottom}
-          style={{
-            background: "#10b981",
-            border: "3px solid white",
-            width: "10px",
-            height: "10px",
-            boxShadow: "0 2px 6px rgba(16, 185, 129, 0.3)",
-          }}
+          className="!bg-emerald-500 !border-[3px] !border-slate-800 !w-2.5 !h-2.5 !shadow-lg !shadow-emerald-500/50"
         />
       </div>
     </div>

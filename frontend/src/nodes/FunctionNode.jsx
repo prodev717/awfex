@@ -7,122 +7,26 @@ export default function FunctionNode({ id, data }) {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative group">
       {/* Tooltip */}
-      <div
-        className="function-node-tooltip"
-        style={{
-          position: "absolute",
-          top: "100%",                                  // BELOW the node
-          left: "50%",
-          transform: "translateX(-50%) translateY(8px)", // spacing below
-          background: "#1e293b",
-          color: "white",
-          padding: "10px 12px",
-          borderRadius: "6px",
-          fontSize: "11px",
-          fontWeight: "500",
-          whiteSpace: "pre-wrap",                        // preserves \n AND wraps
-          pointerEvents: "none",
-          opacity: 0,
-          transition: "opacity 200ms ease",
-          zIndex: 50,
-          lineHeight: "1.45",
-          width: "max-content",                          // grows with content
-          maxWidth: "300px",                             // wrap long text
-          boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-        }}
-      >
+      <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-2 bg-slate-800 text-white px-3 py-2.5 rounded-md text-[11px] font-medium whitespace-pre-wrap pointer-events-none opacity-0 transition-opacity duration-200 z-50 leading-relaxed w-max max-w-[300px] shadow-xl border border-slate-700 group-hover:opacity-100">
         {data.tooltip ?? "No Description Avaliable"}
       </div>
-
-
 
       <div
         role="group"
         aria-label={`function-node-${id}`}
-        style={{
-          position: "relative",
-          background: "#ffffff",
-          border: "1.5px solid #e2e8f0",
-          borderRadius: "8px",
-          padding: "12px 16px",
-          width: "180px",
-          minHeight: "60px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "6px",
-          boxShadow:
-            "0 2px 4px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.04)",
-          transition: "border-color 200ms ease, box-shadow 200ms ease",
-          userSelect: "none",
-          cursor: "grab",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow =
-            "0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.08), 0 16px 32px rgba(99, 102, 241, 0.06)";
-          e.currentTarget.style.borderColor = "#c7d2fe";
-
-          const tooltip =
-            e.currentTarget.parentElement.querySelector(
-              ".function-node-tooltip"
-            );
-          tooltip.style.opacity = 1;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow =
-            "0 2px 4px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.04)";
-          e.currentTarget.style.borderColor = "#e2e8f0";
-
-          const tooltip =
-            e.currentTarget.parentElement.querySelector(
-              ".function-node-tooltip"
-            );
-          tooltip.style.opacity = 0;
-        }}
+        className="relative bg-slate-800 border border-slate-700 rounded-xl p-4 w-[180px] min-h-[60px] flex flex-col items-center justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-grab hover:shadow-xl hover:shadow-indigo-500/10 hover:border-indigo-400/50"
       >
         {/* Accent bar */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "3px",
-            background: "linear-gradient(90deg, #818cf8 0%, #6366f1 100%)",
-            borderRadius: "8px 8px 0 0",
-          }}
-        />
+        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-400 to-purple-500 rounded-t-xl" />
 
         {/* Delete button */}
         <button
           onClick={handleDelete}
           title="Delete node"
           aria-label={`delete-function-${id}`}
-          style={{
-            position: "absolute",
-            top: "-10px",
-            right: "-10px",
-            border: "none",
-            background: "#ef4444",
-            color: "white",
-            borderRadius: "50%",
-            width: "28px",
-            height: "28px",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "700",
-            display: "grid",
-            placeItems: "center",
-            boxShadow: "0 2px 8px rgba(239, 68, 68, 0.3)",
-            transition: "opacity 200ms ease",
-            zIndex: 20,
-            opacity: 0.95,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.95")}
+          className="absolute -top-2.5 -right-2.5 border-none bg-red-500 text-white rounded-full w-7 h-7 cursor-pointer text-base font-bold grid place-items-center shadow-md shadow-red-500/30 transition-opacity duration-200 z-20 opacity-0 group-hover:opacity-100 hover:bg-red-600"
         >
           ×
         </button>
@@ -131,60 +35,24 @@ export default function FunctionNode({ id, data }) {
         <Handle
           type="target"
           position={Position.Top}
-          style={{
-            background: "#6366f1",
-            border: "3px solid white",
-            width: "10px",
-            height: "10px",
-            boxShadow: "0 2px 6px rgba(99, 102, 241, 0.3)",
-          }}
+          className="!bg-indigo-500 !border-[3px] !border-slate-800 !w-2.5 !h-2.5 !shadow-lg !shadow-indigo-500/50"
         />
 
         {/* Label */}
-        <div
-          style={{
-            fontWeight: "700",
-            fontSize: "15px",
-            color: "#0f172a",
-            textAlign: "center",
-            letterSpacing: "-0.01em",
-            lineHeight: "1.3",
-          }}
-        >
+        <div className="font-bold text-[15px] text-slate-100 text-center tracking-tight leading-snug">
           {data.label}
         </div>
 
         {/* Description */}
         {data.description && (
-          <div
-            style={{
-              fontSize: "11px",
-              fontWeight: "500",
-              color: "#64748b",
-              textAlign: "center",
-              lineHeight: "1.4",
-            }}
-          >
+          <div className="text-[11px] font-medium text-slate-400 text-center leading-snug">
             {data.description}
           </div>
         )}
 
         {/* Type badge */}
         {data.type && (
-          <div
-            style={{
-              marginTop: "2px",
-              fontSize: "9px",
-              fontWeight: "700",
-              color: "#6366f1",
-              background: "#f5f7ff",
-              padding: "3px 8px",
-              borderRadius: "4px",
-              textTransform: "uppercase",
-              letterSpacing: "0.6px",
-              border: "1px solid #e0e7ff",
-            }}
-          >
+          <div className="mt-1 text-[9px] font-bold text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 uppercase tracking-wider">
             {data.type}
           </div>
         )}
@@ -193,13 +61,7 @@ export default function FunctionNode({ id, data }) {
         <Handle
           type="source"
           position={Position.Bottom}
-          style={{
-            background: "#10b981",
-            border: "3px solid white",
-            width: "10px",
-            height: "10px",
-            boxShadow: "0 2px 6px rgba(16, 185, 129, 0.3)",
-          }}
+          className="!bg-emerald-500 !border-[3px] !border-slate-800 !w-2.5 !h-2.5 !shadow-lg !shadow-emerald-500/50"
         />
       </div>
     </div>

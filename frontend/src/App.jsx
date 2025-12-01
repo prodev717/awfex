@@ -116,16 +116,7 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        margin: 0,
-        padding: 0,
-        overflow: "hidden"
-      }}
-    >
+    <div className="w-screen h-screen flex m-0 p-0 overflow-hidden bg-slate-950 text-slate-200">
       <LeftPanel
         prettyJSON={prettyJSON}
         onCopy={copyToClipboard}
@@ -137,7 +128,7 @@ export default function App() {
         onDeleteWorkflow={handleDeleteWorkflow}
       />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <div className="flex-1 flex flex-col overflow-hidden relative">
         <Toolbar
           functions={functions}
           selectedFunc={selectedFunc}

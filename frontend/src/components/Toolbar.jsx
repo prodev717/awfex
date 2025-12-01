@@ -34,42 +34,12 @@ export default function Toolbar({
 
   return (
     <>
-      <div
-        style={{
-          padding: "12px 20px",
-          borderBottom: "1.5px solid #e2e8f0",
-          display: "flex",
-          gap: "10px",
-          alignItems: "center",
-          background: "#ffffff",
-          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.02)",
-        }}
-      >
+      <div className="px-5 py-3 border-b border-slate-800 flex gap-3 items-center bg-slate-900 shadow-sm">
         {/* Function Selector */}
         <select
           value={selectedFunc}
           onChange={(e) => setSelectedFunc(e.target.value)}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "6px",
-            border: "1.5px solid #e2e8f0",
-            background: "#fafbfc",
-            fontSize: "13px",
-            fontWeight: "600",
-            color: "#1e293b",
-            cursor: "pointer",
-            outline: "none",
-            transition: "all 200ms ease",
-            minWidth: "160px",
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = "#3b82f6";
-            e.currentTarget.style.background = "#ffffff";
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = "#e2e8f0";
-            e.currentTarget.style.background = "#fafbfc";
-          }}
+          className="py-2 px-3 rounded-lg border border-slate-700 bg-slate-800 text-sm font-semibold text-slate-200 cursor-pointer outline-none transition-all min-w-[160px] focus:border-indigo-500 focus:bg-slate-900"
         >
           <option value="">Select function</option>
           {functions.map((f) => (
@@ -83,32 +53,10 @@ export default function Toolbar({
         <button
           onClick={onAddFunc}
           disabled={!selectedFunc}
-          style={{
-            padding: "8px 14px",
-            borderRadius: "6px",
-            border: "1.5px solid #c7d2fe",
-            background: selectedFunc ? "#6366f1" : "#e2e8f0",
-            color: selectedFunc ? "#ffffff" : "#94a3b8",
-            fontSize: "13px",
-            fontWeight: "600",
-            cursor: selectedFunc ? "pointer" : "not-allowed",
-            transition: "all 200ms ease",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-          onMouseEnter={(e) => {
-            if (selectedFunc) {
-              e.currentTarget.style.background = "#4f46e5";
-              e.currentTarget.style.borderColor = "#a5b4fc";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (selectedFunc) {
-              e.currentTarget.style.background = "#6366f1";
-              e.currentTarget.style.borderColor = "#c7d2fe";
-            }
-          }}
+          className={`py-2 px-3.5 rounded-lg border text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${selectedFunc
+              ? "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 hover:border-indigo-400 shadow-lg shadow-indigo-500/20"
+              : "bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed"
+            }`}
         >
           <span>➕</span>
           Add Function
@@ -117,63 +65,19 @@ export default function Toolbar({
         {/* Add Input Button */}
         <button
           onClick={onAddInput}
-          style={{
-            padding: "8px 14px",
-            borderRadius: "6px",
-            border: "1.5px solid #bfdbfe",
-            background: "#3b82f6",
-            color: "#ffffff",
-            fontSize: "13px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 200ms ease",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#2563eb";
-            e.currentTarget.style.borderColor = "#93c5fd";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#3b82f6";
-            e.currentTarget.style.borderColor = "#bfdbfe";
-          }}
+          className="py-2 px-3.5 rounded-lg border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20"
         >
           <span>🔢</span>
           Add Input
         </button>
 
         {/* Spacer */}
-        <div style={{ flex: 1 }} />
+        <div className="flex-1" />
 
         {/* Save Workflow Button */}
         <button
           onClick={() => setShowSaveModal(true)}
-          style={{
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "1.5px solid #d1fae5",
-            background: "#10b981",
-            color: "#ffffff",
-            fontSize: "13px",
-            fontWeight: "700",
-            cursor: "pointer",
-            transition: "all 200ms ease",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#059669";
-            e.currentTarget.style.borderColor = "#a7f3d0";
-            e.currentTarget.style.boxShadow = "0 2px 8px rgba(16, 185, 129, 0.2)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#10b981";
-            e.currentTarget.style.borderColor = "#d1fae5";
-            e.currentTarget.style.boxShadow = "none";
-          }}
+          className="py-2 px-4 rounded-lg border border-emerald-500/50 bg-emerald-600 text-white text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-emerald-500 hover:border-emerald-400 shadow-lg shadow-emerald-500/20"
         >
           <span>💾</span>
           Save Workflow
@@ -183,80 +87,30 @@ export default function Toolbar({
       {/* Save Modal */}
       {showSaveModal && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(15, 23, 42, 0.6)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center z-[1000]"
           onClick={() => setShowSaveModal(false)}
         >
           <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "12px",
-              padding: "24px",
-              width: "440px",
-              maxWidth: "90vw",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08)",
-              border: "1.5px solid #e2e8f0",
-            }}
+            className="bg-slate-900 rounded-xl p-6 w-[440px] max-w-[90vw] shadow-2xl border border-slate-800"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-              <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "700", color: "#0f172a" }}>
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="m-0 text-lg font-bold text-slate-100">
                 Save Workflow
               </h3>
               <button
                 onClick={() => setShowSaveModal(false)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  fontSize: "24px",
-                  color: "#64748b",
-                  cursor: "pointer",
-                  padding: "0",
-                  width: "32px",
-                  height: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "6px",
-                  transition: "all 200ms ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#f1f5f9";
-                  e.currentTarget.style.color = "#0f172a";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "#64748b";
-                }}
+                className="bg-transparent border-none text-2xl text-slate-500 cursor-pointer p-0 w-8 h-8 flex items-center justify-center rounded-md transition-all hover:bg-slate-800 hover:text-slate-300"
               >
                 ×
               </button>
             </div>
 
             {/* Form Fields */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div className="flex flex-col gap-4">
               <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    color: "#475569",
-                    marginBottom: "6px",
-                  }}
-                >
+                <label className="block text-sm font-semibold text-slate-400 mb-1.5">
                   Workflow Name
                 </label>
                 <input
@@ -264,133 +118,40 @@ export default function Toolbar({
                   value={workflowName}
                   onChange={(e) => setWorkflowName(e.target.value)}
                   placeholder="e.g., mathFlow"
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "6px",
-                    border: "1.5px solid #e2e8f0",
-                    background: "#fafbfc",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#1e293b",
-                    outline: "none",
-                    transition: "all 200ms ease",
-                    boxSizing: "border-box",
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "#3b82f6";
-                    e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.08)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e2e8f0";
-                    e.currentTarget.style.background = "#fafbfc";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
+                  className="w-full py-2.5 px-3 rounded-lg border border-slate-700 bg-slate-950 text-sm font-medium text-slate-200 outline-none transition-all focus:border-indigo-500 focus:bg-slate-900 focus:ring-1 focus:ring-indigo-500/50"
                   autoFocus
                 />
               </div>
 
               <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    color: "#475569",
-                    marginBottom: "6px",
-                  }}
-                >
-                  Query Parameters <span style={{ color: "#94a3b8", fontWeight: "500" }}>(optional)</span>
+                <label className="block text-sm font-semibold text-slate-400 mb-1.5">
+                  Query Parameters <span className="text-slate-600 font-medium">(optional)</span>
                 </label>
                 <input
                   type="text"
                   value={queryParams}
                   onChange={(e) => setQueryParams(e.target.value)}
                   placeholder="e.g., x=10&y=20"
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "6px",
-                    border: "1.5px solid #e2e8f0",
-                    background: "#fafbfc",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "#1e293b",
-                    outline: "none",
-                    transition: "all 200ms ease",
-                    boxSizing: "border-box",
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "#3b82f6";
-                    e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.08)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#e2e8f0";
-                    e.currentTarget.style.background = "#fafbfc";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
+                  className="w-full py-2.5 px-3 rounded-lg border border-slate-700 bg-slate-950 text-sm font-medium text-slate-200 outline-none transition-all focus:border-indigo-500 focus:bg-slate-900 focus:ring-1 focus:ring-indigo-500/50"
                 />
               </div>
             </div>
 
             {/* Modal Actions */}
-            <div style={{ display: "flex", gap: "8px", marginTop: "24px", justifyContent: "flex-end" }}>
+            <div className="flex gap-2 mt-6 justify-end">
               <button
                 onClick={() => setShowSaveModal(false)}
                 disabled={isSaving}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "6px",
-                  border: "1.5px solid #e2e8f0",
-                  background: "#ffffff",
-                  color: "#475569",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  cursor: isSaving ? "not-allowed" : "pointer",
-                  transition: "all 200ms ease",
-                  opacity: isSaving ? 0.5 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  if (!isSaving) {
-                    e.currentTarget.style.background = "#f8fafc";
-                    e.currentTarget.style.borderColor = "#cbd5e1";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isSaving) {
-                    e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.borderColor = "#e2e8f0";
-                  }
-                }}
+                className={`py-2.5 px-5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 text-sm font-semibold cursor-pointer transition-all hover:bg-slate-700 hover:text-slate-200 ${isSaving ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={isSaving || !workflowName.trim()}
-                style={{
-                  padding: "10px 24px",
-                  borderRadius: "6px",
-                  border: "1.5px solid #10b981",
-                  background: isSaving || !workflowName.trim() ? "#d1d5db" : "#10b981",
-                  color: "#ffffff",
-                  fontSize: "13px",
-                  fontWeight: "700",
-                  cursor: isSaving || !workflowName.trim() ? "not-allowed" : "pointer",
-                  transition: "all 200ms ease",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isSaving && workflowName.trim()) {
-                    e.currentTarget.style.background = "#059669";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isSaving && workflowName.trim()) {
-                    e.currentTarget.style.background = "#10b981";
-                  }
-                }}
+                className={`py-2.5 px-6 rounded-lg border border-emerald-500 bg-emerald-600 text-white text-sm font-bold cursor-pointer transition-all hover:bg-emerald-500 hover:border-emerald-400 ${isSaving || !workflowName.trim() ? "opacity-50 cursor-not-allowed bg-slate-700 border-slate-600 text-slate-400" : ""
+                  }`}
               >
                 {isSaving ? "Saving..." : "Save"}
               </button>
