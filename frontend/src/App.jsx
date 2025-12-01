@@ -4,6 +4,7 @@ import LeftPanel from "./components/LeftPanel";
 import Toolbar from "./components/Toolbar";
 import FunctionNode from "./nodes/FunctionNode";
 import InputNode from "./nodes/InputNode";
+import ResultModal from "./components/ResultModal";
 import { useWorkflows } from "./hooks/useWorkflows";
 import { useFlow } from "./hooks/useFlow";
 import { api } from "./services/api";
@@ -19,6 +20,11 @@ export default function App() {
   const [descriptions, setDescriptions] = useState({});
   const [selectedFunc, setSelectedFunc] = useState("");
   const [query, setQuery] = useState("");
+
+  // Result Modal State
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [runResult, setRunResult] = useState(null);
+  const [runError, setRunError] = useState(null);
 
   const {
     workflows,
@@ -59,15 +65,21 @@ export default function App() {
       alert("No workflow to run. Please create nodes and connect them.");
       return;
     }
+
+    setRunError(null);
+    setRunResult(null);
+
     try {
       const data = await api.runWorkflow(workflowJSON, query);
       if (data.success) {
-        alert(`Result:\n${JSON.stringify(data.result, null, 2)}`);
+        setRunResult(data.result);
+        setShowResultModal(true);
       } else {
         throw new Error(data.error || "Run failed");
       }
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      setRunError(err.message);
+      setShowResultModal(true);
     }
   };
 
@@ -144,6 +156,13 @@ export default function App() {
           onConnect={onConnect}
         />
       </div>
+
+      <ResultModal
+        isOpen={showResultModal}
+        onClose={() => setShowResultModal(false)}
+        result={runResult}
+        error={runError}
+      />
     </div>
   );
 }
