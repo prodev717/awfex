@@ -54,11 +54,10 @@ export default function Toolbar({
           onClick={onAddFunc}
           disabled={!selectedFunc}
           className={`py-2 px-3.5 rounded-lg border text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${selectedFunc
-              ? "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 hover:border-indigo-400 shadow-lg shadow-indigo-500/20"
-              : "bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed"
+            ? "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 hover:border-indigo-400 shadow-lg shadow-indigo-500/20"
+            : "bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed"
             }`}
         >
-          <span>➕</span>
           Add Function
         </button>
 
@@ -67,7 +66,6 @@ export default function Toolbar({
           onClick={onAddInput}
           className="py-2 px-3.5 rounded-lg border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20"
         >
-          <span>🔢</span>
           Add Input
         </button>
 
@@ -79,7 +77,6 @@ export default function Toolbar({
           onClick={() => setShowSaveModal(true)}
           className="py-2 px-4 rounded-lg border border-emerald-500/50 bg-emerald-600 text-white text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-emerald-500 hover:border-emerald-400 shadow-lg shadow-emerald-500/20"
         >
-          <span>💾</span>
           Save Workflow
         </button>
       </div>

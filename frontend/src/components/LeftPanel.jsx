@@ -159,7 +159,6 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, onRun, qu
         onClick={onRun}
         className="py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 hover:border-indigo-400 rounded-md text-white text-sm font-bold cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
       >
-        <span>▶️</span>
         Run Current Workflow
       </button>
 
