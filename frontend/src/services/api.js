@@ -1,11 +1,13 @@
-const BASE_URL = "http://localhost:5000";
-
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
 }
+
+const getBaseUrl = () => {
+    return getCookie("apiUrl") || "http://localhost:5000";
+};
 
 const getAuthHeaders = () => {
     const apiKey = getCookie("apiKey");
@@ -14,21 +16,21 @@ const getAuthHeaders = () => {
 
 export const api = {
     fetchFunctions: async () => {
-        const res = await fetch(`${BASE_URL}/functions`, {
+        const res = await fetch(`${getBaseUrl()}/functions`, {
             headers: getAuthHeaders()
         });
         return res.json();
     },
 
     fetchDescriptions: async () => {
-        const res = await fetch(`${BASE_URL}/descriptions`, {
+        const res = await fetch(`${getBaseUrl()}/descriptions`, {
             headers: getAuthHeaders()
         });
         return res.json();
     },
 
     fetchWorkflows: async () => {
-        const res = await fetch(`${BASE_URL}/workflow`, {
+        const res = await fetch(`${getBaseUrl()}/workflow`, {
             headers: getAuthHeaders()
         });
         if (!res.ok) throw new Error("Failed to fetch workflows");
@@ -36,7 +38,7 @@ export const api = {
     },
 
     fetchWorkflowDetails: async (name) => {
-        const res = await fetch(`${BASE_URL}/workflow/${name}`, {
+        const res = await fetch(`${getBaseUrl()}/workflow/${name}`, {
             headers: getAuthHeaders()
         });
         if (!res.ok) throw new Error(`Failed to fetch ${name}`);
@@ -44,7 +46,7 @@ export const api = {
     },
 
     saveWorkflow: async (name, workflow) => {
-        const res = await fetch(`${BASE_URL}/workflow`, {
+        const res = await fetch(`${getBaseUrl()}/workflow`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +62,7 @@ export const api = {
     },
 
     deleteWorkflow: async (name) => {
-        const res = await fetch(`${BASE_URL}/workflow/${name}`, {
+        const res = await fetch(`${getBaseUrl()}/workflow/${name}`, {
             method: "DELETE",
             headers: getAuthHeaders()
         });
@@ -72,7 +74,7 @@ export const api = {
     },
 
     runWorkflow: async (workflow, query = "") => {
-        const res = await fetch(`${BASE_URL}/run${query}`, {
+        const res = await fetch(`${getBaseUrl()}/run${query}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

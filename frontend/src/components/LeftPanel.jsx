@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCopy, onRun, workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery }) {
+export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCopy, workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery }) {
   const [activeTab, setActiveTab] = useState("workflows");
 
   return (
@@ -55,7 +55,6 @@ export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCo
               workflows={workflows}
               onSelectWorkflow={onSelectWorkflow}
               onDeleteWorkflow={onDeleteWorkflow}
-              onRun={onRun}
             />
           ) : activeTab === "json" ? (
             <JSONTab prettyJSON={prettyJSON} onCopy={onCopy} />
@@ -156,7 +155,7 @@ function QueryBuilder({ query, setQuery }) {
   );
 }
 
-function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, onRun, query, setQuery }) {
+function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery }) {
   return (
     <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto scrollable">
       <div className="flex justify-between items-center mb-2">
@@ -167,13 +166,6 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, onRun, qu
           {workflows.length} total
         </div>
       </div>
-
-      <button
-        onClick={onRun}
-        className="py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 hover:border-indigo-400 rounded-md text-white text-sm font-bold cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
-      >
-        Run Current Workflow
-      </button>
 
       <QueryBuilder query={query} setQuery={setQuery} />
       <div className="flex flex-col flex-1">
@@ -264,25 +256,74 @@ function SettingsTab() {
     return "";
   });
 
-  const handleSave = (val) => {
+  const [apiUrl, setApiUrl] = useState(() => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; apiUrl=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return "http://localhost:5000";
+  });
+
+  const [showApiKey, setShowApiKey] = useState(false);
+
+  const handleSaveApiKey = (val) => {
     setApiKey(val);
     document.cookie = `apiKey=${val}; path=/; max-age=31536000`; // 1 year
+  };
+
+  const handleSaveApiUrl = (val) => {
+    setApiUrl(val);
+    document.cookie = `apiUrl=${val}; path=/; max-age=31536000`; // 1 year
   };
 
   return (
     <div className="p-4 flex flex-col gap-4">
       <h3 className="text-sm font-bold text-slate-200 m-0">Settings</h3>
+
+      {/* API Key Field */}
       <div className="flex flex-col gap-2">
         <label className="text-xs text-slate-400 font-semibold">API Key</label>
+        <div className="relative">
+          <input
+            type={showApiKey ? "text" : "password"}
+            value={apiKey}
+            onChange={(e) => handleSaveApiKey(e.target.value)}
+            placeholder="Enter API Key"
+            className="w-full py-2.5 px-3 pr-10 bg-slate-800 text-slate-200 border border-slate-700 rounded-md text-sm outline-none focus:border-indigo-500 transition-colors"
+          />
+          <button
+            onClick={() => setShowApiKey(!showApiKey)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors p-1"
+            title={showApiKey ? "Hide API Key" : "Show API Key"}
+          >
+            {showApiKey ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            )}
+          </button>
+        </div>
+        <p className="text-[10px] text-slate-500">
+          Key is stored locally in your browser cookies.
+        </p>
+      </div>
+
+      {/* API URL Field */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs text-slate-400 font-semibold">API URL</label>
         <input
-          type="password"
-          value={apiKey}
-          onChange={(e) => handleSave(e.target.value)}
-          placeholder="Enter API Key"
+          type="text"
+          value={apiUrl}
+          onChange={(e) => handleSaveApiUrl(e.target.value)}
+          placeholder="http://localhost:5000"
           className="w-full py-2.5 px-3 bg-slate-800 text-slate-200 border border-slate-700 rounded-md text-sm outline-none focus:border-indigo-500 transition-colors"
         />
         <p className="text-[10px] text-slate-500">
-          Key is stored locally in your browser cookies.
+          Backend API URL (default: http://localhost:5000)
         </p>
       </div>
     </div>
