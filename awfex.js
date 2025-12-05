@@ -11,6 +11,7 @@ import { wait, waitDescription } from "./functions/wait.js";
 import { jsonParse, jsonParseDescription } from "./functions/jsonParse.js";
 import { jsonStringify, jsonStringifyDescription } from "./functions/jsonStringify.js";
 import { httpRequest, httpRequestDescription } from "./functions/httpRequest.js";
+import { sqlite, sqliteDescription } from "./functions/sqlite.js";
 
 export const FUNCTIONS = {
   add: add,
@@ -22,7 +23,8 @@ export const FUNCTIONS = {
   wait: wait,
   jsonParse: jsonParse,
   jsonStringify: jsonStringify,
-  httpRequest: httpRequest
+  httpRequest: httpRequest,
+  sqlite: sqlite
 };
 
 export const DESCRIPTIONS = {
@@ -35,7 +37,8 @@ export const DESCRIPTIONS = {
   wait: waitDescription,
   jsonParse: jsonParseDescription,
   jsonStringify: jsonStringifyDescription,
-  httpRequest: httpRequestDescription
+  httpRequest: httpRequestDescription,
+  sqlite: sqliteDescription
 };
 
 function convertIfNumeric(str) {
