@@ -1,55 +1,68 @@
 import { useState } from "react";
 
-export default function LeftPanel({ prettyJSON, onCopy, onRun, workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery }) {
+export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCopy, onRun, workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery }) {
   const [activeTab, setActiveTab] = useState("workflows");
 
   return (
-    <div className="w-80 min-w-[260px] bg-slate-900 border-r border-slate-800 flex flex-col h-full overflow-hidden text-slate-200">
-      <div className="flex border-b border-slate-800 bg-slate-900/50">
-        <button
-          onClick={() => setActiveTab("workflows")}
-          className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "workflows"
-            ? "bg-slate-900 text-indigo-400 border-indigo-500"
-            : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
-            }`}
-        >
-          Workflows
-        </button>
-        <button
-          onClick={() => setActiveTab("json")}
-          className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "json"
-            ? "bg-slate-900 text-indigo-400 border-indigo-500"
-            : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
-            }`}
-        >
-          JSON
-        </button>
-        <button
-          onClick={() => setActiveTab("settings")}
-          className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "settings"
-            ? "bg-slate-900 text-indigo-400 border-indigo-500"
-            : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
-            }`}
-        >
-          Settings
-        </button>
-      </div>
+    <div
+      className={`relative flex flex-col h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out text-slate-200 ${isCollapsed ? "w-0 min-w-0 border-none" : "w-80 min-w-[260px]"
+        }`}
+    >
+      {/* Content */}
+      <div className={`flex flex-col h-full overflow-hidden w-80 ${isCollapsed ? "hidden" : "flex"}`}>
+        <div className="flex border-b border-slate-800 bg-slate-900/50">
+          <button
+            onClick={toggleSidebar}
+            className="w-10 flex items-center justify-center text-slate-400 hover:text-white border-r border-slate-800 hover:bg-slate-800 transition-colors"
+            title="Close Sidebar"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <button
+            onClick={() => setActiveTab("workflows")}
+            className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "workflows"
+              ? "bg-slate-900 text-indigo-400 border-indigo-500"
+              : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
+              }`}
+          >
+            Workflows
+          </button>
+          <button
+            onClick={() => setActiveTab("json")}
+            className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "json"
+              ? "bg-slate-900 text-indigo-400 border-indigo-500"
+              : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
+              }`}
+          >
+            JSON
+          </button>
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "settings"
+              ? "bg-slate-900 text-indigo-400 border-indigo-500"
+              : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
+              }`}
+          >
+            Settings
+          </button>
+        </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {activeTab === "workflows" ? (
-          <WorkflowsTab
-            query={query}
-            setQuery={setQuery}
-            workflows={workflows}
-            onSelectWorkflow={onSelectWorkflow}
-            onDeleteWorkflow={onDeleteWorkflow}
-            onRun={onRun}
-          />
-        ) : activeTab === "json" ? (
-          <JSONTab prettyJSON={prettyJSON} onCopy={onCopy} />
-        ) : (
-          <SettingsTab />
-        )}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {activeTab === "workflows" ? (
+            <WorkflowsTab
+              query={query}
+              setQuery={setQuery}
+              workflows={workflows}
+              onSelectWorkflow={onSelectWorkflow}
+              onDeleteWorkflow={onDeleteWorkflow}
+              onRun={onRun}
+            />
+          ) : activeTab === "json" ? (
+            <JSONTab prettyJSON={prettyJSON} onCopy={onCopy} />
+          ) : (
+            <SettingsTab />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -115,7 +128,7 @@ function QueryBuilder({ query, setQuery }) {
               placeholder="Key"
               value={p.key}
               onChange={(e) => handleChange(i, "key", e.target.value)}
-              className="flex-1 py-2.5 px-3 bg-slate-900 text-slate-200 border border-slate-800 rounded-md text-sm outline-none focus:border-indigo-500 transition-colors"
+              className="flex-1 min-w-0 py-2.5 px-3 bg-slate-900 text-slate-200 border border-slate-800 rounded-md text-sm outline-none focus:border-indigo-500 transition-colors"
             />
             <button
               onClick={() => removeParam(i)}

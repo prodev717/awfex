@@ -115,9 +115,15 @@ export default function App() {
     }
   };
 
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // ... (existing hooks)
+
   return (
     <div className="w-screen h-screen flex m-0 p-0 overflow-hidden bg-slate-950 text-slate-200">
       <LeftPanel
+        isCollapsed={isSidebarCollapsed}
+        toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         prettyJSON={prettyJSON}
         onCopy={copyToClipboard}
         onRun={handleRunWorkflow}
@@ -130,6 +136,8 @@ export default function App() {
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <Toolbar
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           functions={functions}
           selectedFunc={selectedFunc}
           setSelectedFunc={setSelectedFunc}

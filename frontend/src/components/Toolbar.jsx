@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 export default function Toolbar({
+  isSidebarCollapsed,
+  onToggleSidebar,
   functions = [],
   selectedFunc,
   setSelectedFunc,
@@ -35,6 +37,19 @@ export default function Toolbar({
   return (
     <>
       <div className="px-5 py-3 border-b border-slate-800 flex gap-3 items-center bg-slate-900 shadow-sm">
+        {/* Toggle Sidebar Button (Hamburger) */}
+        {isSidebarCollapsed && (
+          <button
+            onClick={onToggleSidebar}
+            className="w-8 h-8 flex items-center justify-center mr-2 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors"
+            title="Open Sidebar"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        )}
+
         {/* Function Selector */}
         <select
           value={selectedFunc}
