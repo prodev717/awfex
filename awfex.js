@@ -13,6 +13,7 @@ import { jsonStringify, jsonStringifyDescription } from "./functions/jsonStringi
 import { httpRequest, httpRequestDescription } from "./functions/httpRequest.js";
 import { sqlite, sqliteDescription } from "./functions/sqlite.js";
 import { regex, regexDescription } from "./functions/regex.js";
+import { redis, redisDescription } from "./functions/redis.js";
 
 export const FUNCTIONS = {
   add: add,
@@ -26,7 +27,8 @@ export const FUNCTIONS = {
   jsonStringify: jsonStringify,
   httpRequest: httpRequest,
   sqlite: sqlite,
-  regex: regex
+  regex: regex,
+  redis: redis
 };
 
 export const DESCRIPTIONS = {
@@ -41,7 +43,8 @@ export const DESCRIPTIONS = {
   jsonStringify: jsonStringifyDescription,
   httpRequest: httpRequestDescription,
   sqlite: sqliteDescription,
-  regex: regexDescription
+  regex: regexDescription,
+  redis: redisDescription
 };
 
 function convertIfNumeric(str) {
