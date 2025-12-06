@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { applyEdgeChanges, applyNodeChanges, addEdge } from "reactflow";
 import { rebuildFromWorkflow } from "../utils/workflowUtils";
+import { getLayoutedNodes } from "../utils/layoutUtils";
 
 export function useFlow(descriptions = {}) {
     const [nodes, setNodes] = useState([]);
@@ -88,9 +89,19 @@ export function useFlow(descriptions = {}) {
             return node;
         });
 
-        setNodes(nodesWithTooltips);
+        // Apply auto-layout to the loaded nodes
+        const layoutedNodes = getLayoutedNodes(nodesWithTooltips, newEdges, 'TB');
+
+        setNodes(layoutedNodes);
         setEdges(newEdges);
     };
+
+    const applyAutoLayout = useCallback((direction = 'TB') => {
+        setNodes((currentNodes) => {
+            if (currentNodes.length === 0) return currentNodes;
+            return getLayoutedNodes(currentNodes, edges, direction);
+        });
+    }, [edges]);
 
     return {
         nodes,
@@ -101,6 +112,7 @@ export function useFlow(descriptions = {}) {
         addFunctionNode,
         addInputNode,
         loadWorkflow,
+        applyAutoLayout,
         deleteNode, // Exporting if needed elsewhere
         handleInputValueChange // Exporting if needed elsewhere
     };

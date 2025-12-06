@@ -11,6 +11,7 @@ export default function Toolbar({
   onAddInput,
   onSaveWorkflow,
   onRunWorkflow,
+  onAutoLayout,
   isRunning = false,
   isRunDisabled = false,
 }) {
@@ -99,6 +100,18 @@ export default function Toolbar({
           Add Input
         </button>
 
+        {/* Auto Layout Button */}
+        <button
+          onClick={() => onAutoLayout('TB')}
+          className="py-2 px-3.5 rounded-lg border border-purple-500/50 bg-purple-600 text-white text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-purple-500 hover:border-purple-400 shadow-lg shadow-purple-500/20"
+          title="Auto-arrange nodes vertically (top to bottom)"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
+          </svg>
+          Auto Layout
+        </button>
+
         {/* Spacer */}
         <div className="flex-1" />
 
@@ -121,7 +134,11 @@ export default function Toolbar({
             </>
           ) : (
             <>
-              Run Workflow
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Run
             </>
           )}
         </button>
@@ -131,7 +148,10 @@ export default function Toolbar({
           onClick={() => setShowSaveModal(true)}
           className="py-2 px-4 rounded-lg border border-emerald-500/50 bg-emerald-600 text-white text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-emerald-500 hover:border-emerald-400 shadow-lg shadow-emerald-500/20"
         >
-          Save Workflow
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          Save
         </button>
       </div>
 

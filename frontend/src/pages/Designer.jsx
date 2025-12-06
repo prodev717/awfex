@@ -5,6 +5,7 @@ import Toolbar from "../components/Toolbar";
 import FunctionNode from "../nodes/FunctionNode";
 import InputNode from "../nodes/InputNode";
 import ResultModal from "../components/ResultModal";
+import Toast from "../components/Toast";
 import { useWorkflows } from "../hooks/useWorkflows";
 import { useFlow } from "../hooks/useFlow";
 import { api } from "../services/api";
@@ -27,6 +28,9 @@ export default function Designer() {
     const [runError, setRunError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
 
+    // Toast State
+    const [toast, setToast] = useState(null);
+
     const {
         workflows,
         fetchWorkflows,
@@ -43,6 +47,7 @@ export default function Designer() {
         addFunctionNode,
         addInputNode,
         loadWorkflow,
+        applyAutoLayout,
     } = useFlow(descriptions);
 
     useEffect(() => {
@@ -58,7 +63,7 @@ export default function Designer() {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(prettyJSON);
-        alert("Copied to clipboard!");
+        setToast({ message: "Copied to clipboard!", type: "success" });
     };
 
     const [isJsonValid, setIsJsonValid] = useState(true);
@@ -66,11 +71,11 @@ export default function Designer() {
 
     const handleRunWorkflow = async () => {
         if (!isJsonValid) {
-            alert("Cannot run workflow: Invalid JSON in the editor.");
+            setToast({ message: "Cannot run workflow: Invalid JSON in the editor.", type: "error" });
             return;
         }
         if (!workflowJSON) {
-            alert("No workflow to run. Please create nodes and connect them.");
+            setToast({ message: "No workflow to run. Please create nodes and connect them.", type: "error" });
             return;
         }
 
@@ -97,9 +102,9 @@ export default function Designer() {
     const handleSaveWorkflow = async (name) => {
         try {
             await saveWorkflowApi(name, workflowJSON);
-            alert(`Workflow "${name}" saved successfully!`);
+            setToast({ message: `Workflow "${name}" saved successfully!`, type: "success" });
         } catch (error) {
-            alert(`Error saving workflow: ${error.message}`);
+            setToast({ message: `Error saving workflow: ${error.message}`, type: "error" });
         }
     };
 
@@ -111,18 +116,18 @@ export default function Designer() {
             const data = await api.fetchWorkflowDetails(workflow.name);
             if (!data.success) throw new Error(data.error || "Failed to load workflow");
             loadWorkflow(data.workflow);
-            alert(`Workflow "${workflow.name}" loaded successfully!`);
+            // No success message - silently load the workflow
         } catch (error) {
-            alert(`Error loading workflow: ${error.message}`);
+            setToast({ message: `Error loading workflow: ${error.message}`, type: "error" });
         }
     };
 
     const handleDeleteWorkflow = async (workflowId) => {
         try {
             await deleteWorkflowApi(workflowId);
-            alert("Workflow deleted successfully");
+            setToast({ message: "Workflow deleted successfully", type: "success" });
         } catch (error) {
-            alert(`Error deleting workflow: ${error.message}`);
+            setToast({ message: `Error deleting workflow: ${error.message}`, type: "error" });
         }
     };
 
@@ -159,6 +164,7 @@ export default function Designer() {
                     onAddInput={addInputNode}
                     onSaveWorkflow={handleSaveWorkflow}
                     onRunWorkflow={handleRunWorkflow}
+                    onAutoLayout={applyAutoLayout}
                     isRunning={isRunning}
                     isRunDisabled={!isJsonValid}
                 />
@@ -179,6 +185,14 @@ export default function Designer() {
                 result={runResult}
                 error={runError}
             />
+
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 }
