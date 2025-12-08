@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
 export async function postgres(dbUrl, sqlQuery) {
     if (!dbUrl) {
@@ -9,6 +10,7 @@ export async function postgres(dbUrl, sqlQuery) {
     const sequelize = new Sequelize(dbUrl, {
         dialect: "postgres",
         logging: false,
+        dialectModule: pg,
         dialectOptions: {
             ssl: {
                 require: true,

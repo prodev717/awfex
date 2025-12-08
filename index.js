@@ -4,6 +4,7 @@ import cors from "cors";
 import { FUNCTIONS, DESCRIPTIONS, engine } from "./awfex.js";
 import { Sequelize, Model, DataTypes } from "sequelize";
 import auth from "./middleware/auth.js";
+import pg from "pg";
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,6 +13,7 @@ app.use(cors());
 //  Sequelize Setup for Neon PostgreSQL
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
+  dialectModule: pg,
   dialectOptions: {
     ssl: {
       require: true,
