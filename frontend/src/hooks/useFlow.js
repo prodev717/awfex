@@ -96,12 +96,16 @@ export function useFlow(descriptions = {}) {
         setEdges(newEdges);
     };
 
-    const applyAutoLayout = useCallback((direction = 'TB') => {
-        setNodes((currentNodes) => {
-            if (currentNodes.length === 0) return currentNodes;
-            return getLayoutedNodes(currentNodes, edges, direction);
-        });
-    }, [edges]);
+    const applyAutoLayout = (direction = 'TB') => {
+        const layouted = getLayoutedNodes(nodes, edges, direction);
+        setNodes(layouted.nodes);
+        setEdges(layouted.edges);
+    };
+
+    const clearWorkflow = useCallback(() => {
+        setNodes([]);
+        setEdges([]);
+    }, []);
 
     return {
         nodes,
@@ -113,6 +117,7 @@ export function useFlow(descriptions = {}) {
         addInputNode,
         loadWorkflow,
         applyAutoLayout,
+        clearWorkflow,
         deleteNode, // Exporting if needed elsewhere
         handleInputValueChange // Exporting if needed elsewhere
     };

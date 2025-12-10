@@ -8,16 +8,26 @@ export default function FlowCanvas({
   onNodesChange,
   onEdgesChange,
   onConnect,
+  isRunning = false,
 }) {
+  const animatedEdges = edges.map((edge) => ({
+    ...edge,
+    animated: isRunning,
+  }));
+
   return (
     <div style={{ flex: 1 }}>
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={animatedEdges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        defaultEdgeOptions={{
+          style: { strokeWidth: 3 },
+        }}
+        connectionLineStyle={{ strokeWidth: 3 }}
         fitView
       >
         <Background />

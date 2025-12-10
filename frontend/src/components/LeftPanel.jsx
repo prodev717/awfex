@@ -1,23 +1,107 @@
 import { useState, useEffect } from "react";
+import { MdDelete, MdChevronLeft, MdChevronRight, MdSettings, MdContentPaste, MdInfo, MdHome } from "react-icons/md";
+import { LuWorkflow } from "react-icons/lu";
+import { RiFunctionAddLine } from "react-icons/ri";
 
-export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCopy, onJsonUpdate, onJsonValidityChange, workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery, loading }) {
+export default function LeftPanel({
+  isCollapsed,
+  toggleSidebar,
+  prettyJSON,
+  onCopy,
+  onJsonUpdate,
+  onJsonValidityChange,
+  workflows,
+  onSelectWorkflow,
+  onDeleteWorkflow,
+  query,
+  setQuery,
+  loading,
+  functions = [],
+  selectedFunc,
+  setSelectedFunc,
+  onAddFunc,
+  onAddInput,
+  hasNodes = false
+}) {
   const [activeTab, setActiveTab] = useState("workflows");
+  const [showJsonModal, setShowJsonModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (isCollapsed) {
+      toggleSidebar();
+    }
+  };
 
   return (
-    <div
-      className={`relative flex flex-col h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out text-slate-200 ${isCollapsed ? "w-0 min-w-0 border-none" : "w-80 min-w-[260px]"
-        }`}
-    >
-      {/* Content */}
-      <div className={`flex flex-col h-full overflow-hidden w-80 ${isCollapsed ? "hidden" : "flex"}`}>
-        <div className="flex border-b border-slate-800 bg-slate-900/50">
-          <button
-            onClick={toggleSidebar}
-            className="w-10 flex items-center justify-center text-slate-400 hover:text-white border-r border-slate-800 hover:bg-slate-800 transition-colors"
-            title="Close Sidebar"
+    <div className="relative flex h-full">
+      {isCollapsed && (
+        <div className="w-16 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4 gap-2">
+          <a
+            href="/"
+            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg transition-all mb-4"
+            title="Go to Home"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            <MdHome size={24} />
+          </a>
+
+          <button
+            onClick={() => handleTabClick("workflows")}
+            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg transition-all"
+            title="Workflows"
+          >
+            <LuWorkflow size={24} />
           </button>
+          <button
+            onClick={() => handleTabClick("functions")}
+            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg transition-all"
+            title="Functions"
+          >
+            <RiFunctionAddLine size={24} />
+          </button>
+          <button
+            onClick={() => handleTabClick("settings")}
+            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg transition-all"
+            title="Settings"
+          >
+            <MdSettings size={24} />
+          </button>
+
+          <div className="flex-1" />
+
+          <button
+            onClick={() => setShowInfoModal(!showInfoModal)}
+            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition-all relative"
+            title="Tips"
+          >
+            <MdInfo size={24} />
+          </button>
+
+          {showInfoModal && (
+            <div className="absolute left-16 bottom-4 bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl z-50 w-64 ml-2">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="text-xs font-bold text-slate-200">Tip</h4>
+                <button
+                  onClick={() => setShowInfoModal(false)}
+                  className="text-slate-400 hover:text-slate-200 text-lg leading-none"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="text-[11px] text-slate-300">
+                Give inputs to the functions in the mentioned parameters order.
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div
+        className={`flex flex-col h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out text-slate-200 ${isCollapsed ? "w-0 min-w-0 opacity-0 overflow-hidden" : "w-80 min-w-[260px] opacity-100"
+          }`}
+      >
+        <div className="flex border-b border-slate-800 bg-slate-900/50">
           <button
             onClick={() => setActiveTab("workflows")}
             className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "workflows"
@@ -28,13 +112,13 @@ export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCo
             Workflows
           </button>
           <button
-            onClick={() => setActiveTab("json")}
-            className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "json"
+            onClick={() => setActiveTab("functions")}
+            className={`flex-1 py-3.5 px-4 text-sm font-bold tracking-wide transition-all border-b-2 ${activeTab === "functions"
               ? "bg-slate-900 text-indigo-400 border-indigo-500"
               : "bg-transparent text-slate-400 border-transparent hover:text-slate-300"
               }`}
           >
-            JSON
+            Functions
           </button>
           <button
             onClick={() => setActiveTab("settings")}
@@ -56,13 +140,128 @@ export default function LeftPanel({ isCollapsed, toggleSidebar, prettyJSON, onCo
               onSelectWorkflow={onSelectWorkflow}
               onDeleteWorkflow={onDeleteWorkflow}
               loading={loading}
+              onOpenJsonModal={() => setShowJsonModal(true)}
+              hasNodes={hasNodes}
             />
-          ) : activeTab === "json" ? (
-            <JSONTab prettyJSON={prettyJSON} onCopy={onCopy} onJsonUpdate={onJsonUpdate} onJsonValidityChange={onJsonValidityChange} />
+          ) : activeTab === "functions" ? (
+            <FunctionsTab
+              functions={functions}
+              selectedFunc={selectedFunc}
+              setSelectedFunc={setSelectedFunc}
+              onAddFunc={onAddFunc}
+              onAddInput={onAddInput}
+            />
           ) : (
             <SettingsTab />
           )}
         </div>
+      </div>
+
+      <button
+        onClick={toggleSidebar}
+        className={`absolute top-1/2 -translate-y-1/2 w-6 h-16 bg-slate-900 border-y border-r border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300 shadow-lg z-50 ${isCollapsed ? "left-16 rounded-r-lg" : "left-80 rounded-r-lg"
+          }`}
+        title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
+      >
+        {isCollapsed ? <MdChevronRight size={20} /> : <MdChevronLeft size={20} />}
+      </button>
+
+      {showJsonModal && (
+        <JSONModal
+          prettyJSON={prettyJSON}
+          onCopy={onCopy}
+          onJsonUpdate={onJsonUpdate}
+          onJsonValidityChange={onJsonValidityChange}
+          onClose={() => setShowJsonModal(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+function FunctionsTab({ functions, onAddFunc, onAddInput }) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredFunctions = functions.filter((func) =>
+    func.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="flex-1 flex flex-col p-3 gap-3 overflow-y-auto scrollable">
+      <div className="flex justify-between items-center">
+        <h3 className="m-0 text-sm font-bold text-slate-200">Add Nodes</h3>
+        <div className="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2 py-1 rounded">
+          {functions.length} functions
+        </div>
+      </div>
+
+      <button
+        onClick={onAddInput}
+        className="w-full py-2.5 px-4 rounded-lg border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20"
+      >
+        Add Input Node
+      </button>
+
+      <div className="border-t border-slate-800 pt-3">
+        <div className="flex justify-between items-center mb-3">
+          <h4 className="text-xs font-semibold text-slate-400">Functions</h4>
+          {searchQuery && (
+            <span className="text-[10px] text-slate-500">
+              {filteredFunctions.length} of {functions.length}
+            </span>
+          )}
+        </div>
+
+        <div className="relative mb-3">
+          <input
+            type="text"
+            placeholder="Search functions..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full py-2 px-3 pl-9 bg-slate-800 text-slate-200 border border-slate-700 rounded-lg text-xs outline-none focus:border-indigo-500 focus:bg-slate-900 transition-colors"
+          />
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          {filteredFunctions.length > 0 ? (
+            filteredFunctions.map((func) => (
+              <button
+                key={func}
+                onClick={() => onAddFunc(func)}
+                className="group relative py-3 px-3 rounded-lg border-2 border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 text-xs font-semibold cursor-pointer transition-all hover:border-indigo-500 hover:from-indigo-600 hover:to-indigo-700 hover:text-white hover:shadow-xl hover:shadow-indigo-500/30 hover:scale-105 text-left capitalize active:scale-95"
+                title={`Add ${func} node`}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-md bg-slate-700 group-hover:bg-indigo-500 flex items-center justify-center transition-colors">
+                    <RiFunctionAddLine size={14} />
+                  </div>
+                  <span className="flex-1 truncate">{func}</span>
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="col-span-2 text-center py-6 text-slate-500 text-xs">
+              No functions found
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="text-[11px] text-slate-400 bg-slate-800 p-2.5 rounded-md border border-slate-700 mt-auto">
+        <strong>Tip:</strong> Click on any function to add it to the canvas.
       </div>
     </div>
   );
@@ -134,7 +333,7 @@ function QueryBuilder({ query, setQuery }) {
               onClick={() => removeParam(i)}
               className="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-transparent hover:border-red-600 w-9 h-9 rounded-md flex items-center justify-center transition-all font-bold text-lg flex-shrink-0"
             >
-              ×
+              <MdDelete size={16} />
             </button>
           </div>
           <input
@@ -156,7 +355,7 @@ function QueryBuilder({ query, setQuery }) {
   );
 }
 
-function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery, loading }) {
+function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery, loading, onOpenJsonModal, hasNodes }) {
   return (
     <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto scrollable">
       <div className="flex justify-between items-center mb-2">
@@ -167,6 +366,14 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
           {workflows.length} total
         </div>
       </div>
+
+      <button
+        onClick={onOpenJsonModal}
+        className="py-2.5 px-4 rounded-lg border border-purple-500/50 bg-purple-600 text-white text-sm font-semibold cursor-pointer transition-all hover:bg-purple-500 hover:border-purple-400 shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
+      >
+        <MdContentPaste size={18} />
+        {hasNodes ? "View JSON" : "Paste JSON"}
+      </button>
 
       <QueryBuilder query={query} setQuery={setQuery} />
       <div className="flex flex-col flex-1">
@@ -213,10 +420,10 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
                       e.stopPropagation();
                       onDeleteWorkflow(workflow.id);
                     }}
-                    className="bg-transparent border-none text-red-500/70 hover:text-red-400 hover:bg-red-500/10 cursor-pointer text-base p-0.5 px-1.5 rounded transition-all"
+                    className="bg-transparent border-none text-red-500/70 hover:text-red-400 hover:bg-red-500/10 cursor-pointer text-base p-1.5 rounded transition-all flex items-center justify-center"
                     title="Delete workflow"
                   >
-                    ×
+                    <MdDelete size={18} />
                   </button>
                 </div>
               </div>
@@ -231,7 +438,7 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
   );
 }
 
-function JSONTab({ prettyJSON, onCopy, onJsonUpdate, onJsonValidityChange }) {
+function JSONModal({ prettyJSON, onCopy, onJsonUpdate, onJsonValidityChange, onClose }) {
   const [value, setValue] = useState(prettyJSON);
   const [error, setError] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -239,7 +446,7 @@ function JSONTab({ prettyJSON, onCopy, onJsonUpdate, onJsonValidityChange }) {
   useEffect(() => {
     if (!isFocused && !error) {
       setValue(prettyJSON);
-      if (onJsonValidityChange) onJsonValidityChange(true); // Reset validity when synced
+      if (onJsonValidityChange) onJsonValidityChange(true);
     }
   }, [prettyJSON, isFocused, error, onJsonValidityChange]);
 
@@ -258,33 +465,47 @@ function JSONTab({ prettyJSON, onCopy, onJsonUpdate, onJsonValidityChange }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-3 gap-2">
-      <div className="flex justify-between items-center">
-        <h3 className="m-0 text-sm font-bold text-slate-200">
-          Workflow JSON
-        </h3>
-        <div className="flex gap-2">
-          {error && <span className="text-[10px] text-red-400 font-mono py-1">Invalid JSON</span>}
-          <button
-            onClick={onCopy}
-            className="py-1.5 px-3 bg-slate-800 border border-slate-700 rounded-md text-indigo-400 text-xs font-semibold cursor-pointer transition-all hover:bg-slate-700 hover:text-indigo-300 hover:border-slate-600"
-          >
-            Copy
-          </button>
+    <div
+      className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center z-[1000]"
+      onClick={onClose}
+    >
+      <div
+        className="bg-slate-900 rounded-xl p-6 w-[600px] max-w-[90vw] h-[600px] max-h-[90vh] shadow-2xl border border-slate-800 flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="m-0 text-lg font-bold text-slate-100">Paste Workflow JSON</h3>
+          <div className="flex gap-2 items-center">
+            {error && <span className="text-[10px] text-red-400 font-mono">Invalid JSON</span>}
+            <button
+              onClick={onCopy}
+              className="py-1.5 px-3 bg-slate-800 border border-slate-700 rounded-md text-indigo-400 text-xs font-semibold cursor-pointer transition-all hover:bg-slate-700 hover:text-indigo-300 hover:border-slate-600"
+            >
+              Copy
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-transparent border-none text-2xl text-slate-500 cursor-pointer p-0 w-8 h-8 flex items-center justify-center rounded-md transition-all hover:bg-slate-800 hover:text-slate-300"
+            >
+              ×
+            </button>
+          </div>
         </div>
-      </div>
 
-      <textarea
-        value={value}
-        onChange={handleChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className={`flex-1 overflow-auto bg-slate-950 rounded-md p-3 font-mono text-xs text-indigo-100 border ${error ? "border-red-500/50" : "border-slate-800"} m-0 scrollable resize-none outline-none focus:border-indigo-500 transition-colors`}
-        spellCheck={false}
-      />
+        <textarea
+          value={value}
+          onChange={handleChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className={`flex-1 overflow-auto bg-slate-950 rounded-md p-3 font-mono text-xs text-indigo-100 border ${error ? "border-red-500/50" : "border-slate-800"
+            } m-0 scrollable resize-none outline-none focus:border-indigo-500 transition-colors`}
+          spellCheck={false}
+          placeholder="Paste your workflow JSON here..."
+        />
 
-      <div className="text-[11px] text-slate-400 bg-slate-800 p-2.5 rounded-md border border-slate-700">
-        <strong>Tip:</strong> Edit JSON to update the graph. Connect nodes to generate executable JSON.
+        <div className="text-[11px] text-slate-400 bg-slate-800 p-2.5 rounded-md border border-slate-700 mt-3">
+          <strong>Tip:</strong> Paste valid workflow JSON to instantly load it on the canvas.
+        </div>
       </div>
     </div>
   );
@@ -309,19 +530,18 @@ function SettingsTab() {
 
   const handleSaveApiKey = (val) => {
     setApiKey(val);
-    document.cookie = `apiKey=${val}; path=/; max-age=31536000`; // 1 year
+    document.cookie = `apiKey=${val}; path=/; max-age=31536000`;
   };
 
   const handleSaveApiUrl = (val) => {
     setApiUrl(val);
-    document.cookie = `apiUrl=${val}; path=/; max-age=31536000`; // 1 year
+    document.cookie = `apiUrl=${val}; path=/; max-age=31536000`;
   };
 
   return (
     <div className="p-4 flex flex-col gap-4">
       <h3 className="text-sm font-bold text-slate-200 m-0">Settings</h3>
 
-      {/* API Key Field */}
       <div className="flex flex-col gap-2">
         <label className="text-xs text-slate-400 font-semibold">API Key</label>
         <div className="relative">
@@ -354,8 +574,7 @@ function SettingsTab() {
         </p>
       </div>
 
-      {/* API URL Field */}
-      <div className="flex flex-col gap-2">
+      <div className="flex-col gap-2">
         <label className="text-xs text-slate-400 font-semibold">API URL</label>
         <input
           type="text"

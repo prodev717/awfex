@@ -20,16 +20,7 @@ export default function Home() {
             <header className="relative z-10 pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-20 lg:pb-32">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-16">
-                        {/* Left Content */}
                         <div className="flex-1 text-center lg:text-left z-20 flex flex-col justify-center">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-8 animate-[fadeIn_0.7s_ease-out] hover:bg-indigo-900/50 transition-colors cursor-default self-center lg:self-start">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                                </span>
-                                v1.0.0 Public Release
-                            </div>
-
                             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 animate-[fadeIn_0.8s_ease-out] leading-tight">
                                 <span className="block">Automate Anything.</span>
                                 <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block">
@@ -38,7 +29,7 @@ export default function Home() {
                             </h1>
 
                             <p className="text-base sm:text-lg md:text-xl text-slate-400 mb-10 leading-relaxed animate-[fadeIn_0.9s_ease-out] max-w-2xl mx-auto lg:mx-0">
-                                AWFEX (Automation Workflow Engine Experiment) is the open-source, function-first workflow engine.
+                                AWFEX is the open-source, function-first workflow engine.
                                 Design complex logic pipelines visually, trigger them via HTTP,
                                 and extend effortlessly with standard JavaScript.
                             </p>
@@ -104,7 +95,6 @@ export default function Home() {
 
             <Separator />
 
-            {/* Features Section */}
             <section className="py-16 sm:py-20 lg:py-24 relative z-10 bg-transparent">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12 sm:mb-16">

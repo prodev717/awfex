@@ -49,6 +49,7 @@ export default function Designer() {
         addInputNode,
         loadWorkflow,
         applyAutoLayout,
+        clearWorkflow,
     } = useFlow(descriptions);
 
     useEffect(() => {
@@ -153,20 +154,19 @@ export default function Designer() {
                 onSelectWorkflow={handleSelectWorkflow}
                 onDeleteWorkflow={handleDeleteWorkflow}
                 loading={workflowsLoading}
+                functions={functions}
+                onAddFunc={(funcName) => addFunctionNode(funcName)}
+                onAddInput={addInputNode}
+                hasNodes={nodes.length > 0}
             />
 
             <div className="flex-1 flex flex-col overflow-hidden relative">
                 <Toolbar
                     isSidebarCollapsed={isSidebarCollapsed}
-                    onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                    functions={functions}
-                    selectedFunc={selectedFunc}
-                    setSelectedFunc={setSelectedFunc}
-                    onAddFunc={() => addFunctionNode(selectedFunc)}
-                    onAddInput={addInputNode}
                     onSaveWorkflow={handleSaveWorkflow}
                     onRunWorkflow={handleRunWorkflow}
                     onAutoLayout={applyAutoLayout}
+                    onClearWorkflow={clearWorkflow}
                     isRunning={isRunning}
                     isRunDisabled={!isJsonValid}
                 />
@@ -178,6 +178,7 @@ export default function Designer() {
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
+                    isRunning={isRunning}
                 />
             </div>
 

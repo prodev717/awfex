@@ -109,7 +109,7 @@ export default function HeroFlow() {
 
     const defaultEdgeOptions = {
         animated: true,
-        style: { strokeWidth: 2 },
+        style: { strokeWidth: 3 },
     };
 
     return (

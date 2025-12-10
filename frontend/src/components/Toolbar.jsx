@@ -3,15 +3,10 @@ import { Link } from "react-router-dom";
 
 export default function Toolbar({
   isSidebarCollapsed,
-  onToggleSidebar,
-  functions = [],
-  selectedFunc,
-  setSelectedFunc,
-  onAddFunc,
-  onAddInput,
   onSaveWorkflow,
   onRunWorkflow,
   onAutoLayout,
+  onClearWorkflow,
   isRunning = false,
   isRunDisabled = false,
 }) {
@@ -42,68 +37,22 @@ export default function Toolbar({
   return (
     <>
       <div className="px-5 py-3 border-b border-slate-800 flex gap-3 items-center bg-slate-900 shadow-sm">
-        {/* Toggle Sidebar Button (Hamburger) */}
-        {isSidebarCollapsed && (
-          <button
-            onClick={onToggleSidebar}
+        {!isSidebarCollapsed && (
+          <Link
+            to="/"
             className="w-8 h-8 flex items-center justify-center mr-2 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors"
-            title="Open Sidebar"
+            title="Go to Home"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
-          </button>
+          </Link>
         )}
-
-        {/* Home Button */}
-        <Link
-          to="/"
-          className="w-8 h-8 flex items-center justify-center mr-2 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors"
-          title="Go to Home"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-        </Link>
-
-        {/* Function Selector */}
-        <select
-          value={selectedFunc}
-          onChange={(e) => setSelectedFunc(e.target.value)}
-          className="py-2 px-3 rounded-lg border border-slate-700 bg-slate-800 text-sm font-semibold text-slate-200 cursor-pointer outline-none transition-all min-w-[160px] focus:border-indigo-500 focus:bg-slate-900"
-        >
-          <option value="">Select function</option>
-          {functions.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
-
-        {/* Add Function Button */}
-        <button
-          onClick={onAddFunc}
-          disabled={!selectedFunc}
-          className={`py-2 px-3.5 rounded-lg border text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${selectedFunc
-            ? "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 hover:border-indigo-400 shadow-lg shadow-indigo-500/20"
-            : "bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed"
-            }`}
-        >
-          Add Function
-        </button>
-
-        {/* Add Input Button */}
-        <button
-          onClick={onAddInput}
-          className="py-2 px-3.5 rounded-lg border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20"
-        >
-          Add Input
-        </button>
 
         {/* Auto Layout Button */}
         <button
           onClick={() => onAutoLayout('TB')}
-          className="py-2 px-3.5 rounded-lg border border-purple-500/50 bg-purple-600 text-white text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-purple-500 hover:border-purple-400 shadow-lg shadow-purple-500/20"
+          className="py-2 px-3.5 rounded-lg border border-slate-600 bg-transparent text-slate-300 text-sm font-semibold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-slate-800 hover:border-slate-500 hover:text-white"
           title="Auto-arrange nodes vertically (top to bottom)"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,12 +95,24 @@ export default function Toolbar({
         {/* Save Workflow Button */}
         <button
           onClick={() => setShowSaveModal(true)}
-          className="py-2 px-4 rounded-lg border border-emerald-500/50 bg-emerald-600 text-white text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-emerald-500 hover:border-emerald-400 shadow-lg shadow-emerald-500/20"
+          className="py-2 px-4 rounded-lg border border-slate-600 bg-transparent text-slate-300 text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-slate-800 hover:border-slate-500 hover:text-white"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
           </svg>
           Save
+        </button>
+
+        {/* Close Workflow Button */}
+        <button
+          onClick={onClearWorkflow}
+          className="py-2 px-4 rounded-lg border border-red-600 bg-transparent text-red-400 text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-red-600 hover:border-red-500 hover:text-white"
+          title="Clear all nodes and edges"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Close
         </button>
       </div>
 
