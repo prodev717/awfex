@@ -357,7 +357,7 @@ function QueryBuilder({ query, setQuery }) {
 
 function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, setQuery, loading, onOpenJsonModal, hasNodes }) {
   return (
-    <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto scrollable">
+    <div className="flex-1 flex flex-col p-3 gap-2 overflow-hidden">
       <div className="flex justify-between items-center mb-2">
         <h3 className="m-0 text-sm font-bold text-slate-200">
           Saved Workflows
@@ -376,7 +376,8 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
       </button>
 
       <QueryBuilder query={query} setQuery={setQuery} />
-      <div className="flex flex-col flex-1">
+
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         {loading ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-3 text-slate-500 py-10">
             <svg className="w-8 h-8 animate-spin text-indigo-500/50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -397,7 +398,7 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-col gap-2 mt-2 overflow-y-auto scrollable flex-1">
             {workflows.map((workflow) => (
               <div
                 key={workflow.id}
@@ -430,7 +431,7 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
             ))}
           </div>
         )}
-        <div className="text-[11px] text-slate-400 bg-slate-800 p-2.5 rounded-md border border-slate-700 mt-auto">
+        <div className="text-[11px] text-slate-400 bg-slate-800 p-2.5 rounded-md border border-slate-700 mt-2 flex-shrink-0">
           <strong>Tip:</strong> Give inputs to the functions in the mentioned parameters order.
         </div>
       </div>

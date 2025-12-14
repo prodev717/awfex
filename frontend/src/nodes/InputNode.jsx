@@ -42,7 +42,7 @@ export default function InputNode({ id, data }) {
           role="group"
           aria-label={`input-node-${id}`}
           onClick={handleOpenModal}
-          className="relative bg-slate-800 border-2 border-blue-500/60 rounded-lg p-4 w-[180px] min-h-[60px] flex flex-col items-center justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-pointer hover:shadow-2xl hover:shadow-blue-500/40 hover:border-blue-400/80"
+          className="relative bg-slate-800 border-2 border-blue-500/60 rounded-lg p-4 w-[220px] min-h-[80px] flex flex-col items-center justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-pointer hover:shadow-2xl hover:shadow-blue-500/40 hover:border-blue-400/80"
         >
           <button
             onClick={handleDelete}
@@ -63,10 +63,16 @@ export default function InputNode({ id, data }) {
             Input
           </div>
 
-          <div className="text-[11px] font-medium text-slate-400 text-center leading-snug flex items-center gap-1">
-            <MdEdit size={14} />
-            Click to edit
-          </div>
+          {isEmpty ? (
+            <div className="text-[11px] font-medium text-slate-400 text-center leading-snug flex items-center gap-1">
+              <MdEdit size={14} />
+              Click to edit
+            </div>
+          ) : (
+            <div className="text-[10px] font-medium text-slate-300 text-center leading-snug px-2 py-1 bg-slate-900/50 rounded border border-slate-700 w-full overflow-hidden text-ellipsis whitespace-nowrap" title={data.value}>
+              {data.value}
+            </div>
+          )}
 
           <div className={`mt-1 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${isEmpty
             ? "text-slate-400 bg-slate-700/50 border-slate-600"
@@ -89,7 +95,7 @@ export default function InputNode({ id, data }) {
           onClick={handleCancel}
         >
           <div
-            className="bg-slate-900 rounded-xl p-6 w-[700px] max-w-[90vw] h-[400px] max-h-[90vh] shadow-2xl border border-slate-800 flex flex-col"
+            className="bg-slate-900 rounded-xl p-6 w-[800px] max-w-[90vw] h-[350px] max-h-[90vh] shadow-2xl border border-slate-800 flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">

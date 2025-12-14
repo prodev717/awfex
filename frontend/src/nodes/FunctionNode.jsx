@@ -17,7 +17,7 @@ export default function FunctionNode({ id, data }) {
       <div
         role="group"
         aria-label={`function-node-${id}`}
-        className="relative bg-slate-800 border-2 border-blue-500/60 rounded-lg p-4 w-[180px] min-h-[60px] flex flex-col items-center justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-grab hover:shadow-2xl hover:shadow-blue-500/40 hover:border-blue-400/80"
+        className="relative bg-slate-800 border-2 border-blue-500/60 rounded-lg p-4 w-[220px] min-h-[60px] flex flex-col items-center justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-grab hover:shadow-2xl hover:shadow-blue-500/40 hover:border-blue-400/80"
       >
         <button
           onClick={handleDelete}
@@ -34,12 +34,12 @@ export default function FunctionNode({ id, data }) {
           className="!bg-indigo-500 !border-[3px] !border-slate-800 !w-2.5 !h-2.5 !shadow-lg !shadow-indigo-500/50"
         />
 
-        <div className="font-bold text-[15px] text-slate-100 text-center tracking-tight leading-snug capitalize">
+        <div className="font-bold text-[15px] text-slate-100 text-center tracking-tight leading-snug capitalize break-words w-full px-1">
           {data.label}
         </div>
 
         {data.description && (
-          <div className="text-[11px] font-medium text-slate-400 text-center leading-snug">
+          <div className="text-[11px] font-medium text-slate-400 text-center leading-snug break-words w-full px-1">
             {data.description}
           </div>
         )}

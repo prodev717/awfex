@@ -37,7 +37,7 @@ export const buildWorkflowJSON = (nodes, edges) => {
     return finals.map((n) => resolveNode(n.id));
 };
 
-export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange) => {
+export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange, descriptions = {}) => {
     let newNodes = [];
     let newEdges = [];
     let idCounter = 1;
@@ -91,7 +91,7 @@ export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange
             position: { x: depth * 220, y: xOffset * 120 },
             data: {
                 label: fnName,
-                // tooltip: descriptions[fnName], // Tooltip needs to be handled separately or passed in
+                tooltip: descriptions[fnName],
                 onDelete: deleteNode,
             },
         });

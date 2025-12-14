@@ -72,34 +72,20 @@ export function useFlow(descriptions = {}) {
         const { newNodes, newEdges } = rebuildFromWorkflow(
             workflowData,
             deleteNode,
-            handleInputValueChange
+            handleInputValueChange,
+            descriptions
         );
 
-        // Inject tooltips into rebuilt nodes
-        const nodesWithTooltips = newNodes.map(node => {
-            if (node.type === 'custom') {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        tooltip: descriptions[node.data.label]
-                    }
-                };
-            }
-            return node;
-        });
-
         // Apply auto-layout to the loaded nodes
-        const layoutedNodes = getLayoutedNodes(nodesWithTooltips, newEdges, 'TB');
+        const layoutedNodes = getLayoutedNodes(newNodes, newEdges, 'TB');
 
         setNodes(layoutedNodes);
         setEdges(newEdges);
     };
 
     const applyAutoLayout = (direction = 'TB') => {
-        const layouted = getLayoutedNodes(nodes, edges, direction);
-        setNodes(layouted.nodes);
-        setEdges(layouted.edges);
+        const layoutedNodes = getLayoutedNodes(nodes, edges, direction);
+        setNodes(layoutedNodes);
     };
 
     const clearWorkflow = useCallback(() => {
