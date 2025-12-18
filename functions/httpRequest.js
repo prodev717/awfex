@@ -1,17 +1,17 @@
 export async function httpRequest(url, method = "GET", headers = {}, body = null) {
-    const options = {
-        method,
-        headers: headers || {},
-        body: body ?? null
-    };
+  const options = {
+    method,
+    headers: headers || {},
+    body: body ?? null
+  };
 
-    const response = await fetch(url, options);
+  const response = await fetch(url, options);
 
-    return {
-        status: response.status,
-        headers: Object.fromEntries(response.headers.entries()),
-        body: await response.text()
-    };
+  return {
+    status: response.status,
+    headers: Object.fromEntries(response.headers.entries()),
+    body: await response.json()
+  };
 }
 
 export const httpRequestDescription = `
@@ -19,8 +19,7 @@ httpRequest(url, method, headers, body):
 - Sends an HTTP request using the given URL, method, headers, and body.
 - This node performs **no automatic type conversion**.
 - The body is sent EXACTLY as received.
-- The response body is returned as **raw text only**.
-- If you need JSON parsing or stringifying, use jsonParse or jsonStringify nodes.
+- The response body is returned as JSON.
 
 Parameters:
   url: String — The request URL.
@@ -32,5 +31,5 @@ Returns:
   Object:
     status: Number — HTTP status code.
     headers: Object — Key-value response headers.
-    body: String — Raw response body (not parsed).
+    body: Object — JSON response body.
 `;
