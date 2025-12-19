@@ -223,13 +223,16 @@ export default function FunctionInputPanel({
                                             const value = e.target.value;
                                             if (value === 'manual') {
                                                 handleSourceTypeChange(index, 'manual');
+                                            } else if (value === 'null') {
+                                                handleSourceTypeChange(index, 'null');
                                             } else {
                                                 handleSourceTypeChange(index, 'node', value);
                                             }
                                         }}
                                         className="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-md p-2 pr-8 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer"
                                     >
-                                        <option value="manual">✏️ Manual Input</option>
+                                        <option value="manual">Manual Input</option>
+                                        <option value="null">Null</option>
                                         {availableInputs.map(input => (
                                             <option key={input.id} value={input.id}>
                                                 ← {input.name}
@@ -249,6 +252,10 @@ export default function FunctionInputPanel({
                                         placeholder={`Value for ${mapping.paramName}`}
                                         className="w-full bg-slate-950 rounded-md p-2 text-slate-100 border border-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm min-h-[80px] resize-y"
                                     />
+                                ) : mapping.sourceType === 'null' ? (
+                                    <div className="flex items-center justify-center p-2 bg-slate-900/50 border border-slate-700/50 rounded-md text-slate-500 italic text-sm h-[80px]">
+                                        value is null
+                                    </div>
                                 ) : (
                                     <div className="flex items-center gap-2 p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-md">
                                         <MdLink className="text-indigo-400" size={16} />

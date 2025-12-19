@@ -28,6 +28,8 @@ export const buildWorkflowJSON = (nodes, edges) => {
             const args = node.data.parameterMappings.map(mapping => {
                 if (mapping.sourceType === 'node' && mapping.sourceNodeId) {
                     return resolveNode(mapping.sourceNodeId, new Set(visited));
+                } else if (mapping.sourceType === 'null') {
+                    return undefined;
                 } else {
                     // Manual value
                     const raw = mapping.manualValue;
@@ -37,6 +39,12 @@ export const buildWorkflowJSON = (nodes, edges) => {
                     return !Number.isNaN(num) && String(num) === rawStr ? num : raw;
                 }
             });
+
+            // Remove trailing undefined values (equivalent to not passing the argument)
+            while (args.length > 0 && args[args.length - 1] === undefined) {
+                args.pop();
+            }
+
             return { [node.data?.label ?? "fn"]: args };
         }
 
@@ -61,7 +69,7 @@ export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange
     const genEdgeId = (source, target) => `e-${source}-${target}-${edgeCounter++}`;
 
     const computeWidth = (data) => {
-        if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        if (typeof data !== "object" || (data === null) || Array.isArray(data)) {
             return 1; // leaf (input node)
         }
 
@@ -73,7 +81,7 @@ export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange
     const build = (data, depth = 0, xOffset = 0) => {
         let nodeId;
 
-        if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        if (typeof data !== "object" || (data === null) || Array.isArray(data)) {
             nodeId = genNodeId("input");
 
             newNodes.push({
@@ -107,7 +115,15 @@ export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange
         args.forEach((arg, index) => {
             const paramName = paramNames[index] || `Argument ${index + 1}`;
 
-            if (typeof arg === "object" && arg !== null && !Array.isArray(arg)) {
+            if (arg === null) {
+                // Explicit null
+                mappings.push({
+                    paramName,
+                    sourceType: 'null',
+                    sourceNodeId: null,
+                    manualValue: ''
+                });
+            } else if (typeof arg === "object" && !Array.isArray(arg)) {
                 // It's a node connection
                 const w = computeWidth(arg);
                 const childCenter = childYOffset + w / 2;

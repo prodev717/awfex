@@ -88,9 +88,9 @@ export default function InputNode({ id, data }) {
         <FunctionInputPanel
           isOpen={showModal}
           onClose={handleCancel}
-          onSave={(values, nodeName) => {
-            // For input node, we only use the first value
-            data.onValueChange?.(id, values[0] || "");
+          onSave={(mappings, nodeName) => {
+            const val = mappings[0]?.manualValue || "";
+            data.onValueChange?.(id, val);
             if (nodeName && data.onNameChange) {
               data.onNameChange(id, nodeName);
             }
@@ -98,8 +98,13 @@ export default function InputNode({ id, data }) {
           }}
           functionName="Input"
           nodeName={data.name}
-          connectedArgs={[]}
-          manualArgs={[data.value ?? ""]}
+          functionMetadata={{ parameters: ["Value"] }}
+          currentMappings={[{
+            paramName: "Value",
+            sourceType: 'manual',
+            sourceNodeId: null,
+            manualValue: data.value ?? ""
+          }]}
         />
       )}
     </>

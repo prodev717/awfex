@@ -17,7 +17,7 @@ export function useFlow(functionMetadata = {}) {
     const handleArgsChange = useCallback((id, newArgs) => {
         setNodes((nodes) =>
             nodes.map((n) =>
-                n.id === id ? { ...n, data: { ...n.data, manualArgs: newArgs } } : n
+                n.id === id ? { ...n, data: { ...n.data, parameterMappings: newArgs } } : n
             )
         );
     }, []);

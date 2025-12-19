@@ -17,6 +17,8 @@ import { redis, redisDescription, redisMetadata } from "./functions/redis.js";
 import { code, codeDescription, codeMetadata } from "./functions/code.js";
 import { array, arrayDescription, arrayMetadata } from "./functions/array.js";
 import { jsonExpression, jsonExpressionDescription, jsonExpressionMetadata } from "./functions/jsonExpression.js";
+import { gmail, gmailDescription, gmailMetadata } from "./functions/gmail.js";
+import { telegram, telegramDescription, telegramMetadata } from "./functions/telegram.js";
 
 export const FUNCTIONS = {
   add,
@@ -35,6 +37,8 @@ export const FUNCTIONS = {
   code,
   array,
   jsonExpression,
+  gmail,
+  telegram,
 };
 
 export const DESCRIPTIONS = {
@@ -54,6 +58,8 @@ export const DESCRIPTIONS = {
   code: codeDescription,
   array: arrayDescription,
   jsonExpression: jsonExpressionDescription,
+  gmail: gmailDescription,
+  telegram: telegramDescription,
 };
 
 // Function metadata (parameters, icons, variable params flag)
@@ -75,6 +81,8 @@ export const METADATA = {
   code: { description: codeDescription, ...codeMetadata },
   array: { description: arrayDescription, ...arrayMetadata },
   jsonExpression: { description: jsonExpressionDescription, ...jsonExpressionMetadata },
+  gmail: { description: gmailDescription, ...gmailMetadata },
+  telegram: { description: telegramDescription, ...telegramMetadata },
 };
 
 function convertIfNumeric(str) {
