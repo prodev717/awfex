@@ -1,10 +1,10 @@
 import { Handle, Position } from "reactflow";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdInput } from "react-icons/md";
 import { useState } from "react";
+import FunctionInputPanel from "../components/FunctionInputPanel";
 
 export default function InputNode({ id, data }) {
   const [showModal, setShowModal] = useState(false);
-  const [tempValue, setTempValue] = useState(data.value ?? "");
 
   const handleDelete = (e) => {
     e.stopPropagation();
@@ -13,17 +13,10 @@ export default function InputNode({ id, data }) {
 
   const handleOpenModal = (e) => {
     e.stopPropagation();
-    setTempValue(data.value ?? "");
     setShowModal(true);
   };
 
-  const handleSave = () => {
-    data.onValueChange?.(id, tempValue);
-    setShowModal(false);
-  };
-
   const handleCancel = () => {
-    setTempValue(data.value ?? "");
     setShowModal(false);
   };
 
@@ -33,16 +26,16 @@ export default function InputNode({ id, data }) {
   return (
     <>
       <div className="relative group">
-        <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-3 bg-slate-900/95 backdrop-blur-sm text-slate-100 px-4 py-3 rounded-lg text-xs font-medium whitespace-pre-wrap pointer-events-none opacity-0 transition-all duration-300 z-50 leading-relaxed w-max max-w-[200px] shadow-2xl border border-blue-500/30 group-hover:opacity-100 group-hover:translate-y-2">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-3 bg-slate-900/95 backdrop-blur-sm text-slate-100 px-4 py-3 rounded-lg text-xs font-medium whitespace-pre-wrap pointer-events-none opacity-0 transition-all duration-300 z-50 leading-relaxed w-max max-w-[300px] shadow-2xl border border-blue-500/30 group-hover:opacity-100 group-hover:translate-y-2">
           <div className="text-blue-400 font-semibold mb-1 text-[10px] uppercase tracking-wide">Description</div>
-          <div className="text-slate-200">This node is used to give inputs to the other function nodes. It always outputs a string.</div>
+          <div className="text-slate-200">This node is used to give inputs to the other function nodes. It always outputs a string. Note: If only numbers are entered, they will be treated as numbers.</div>
         </div>
 
         <div
           role="group"
           aria-label={`input-node-${id}`}
           onDoubleClick={handleOpenModal}
-          className="relative bg-slate-800 border-2 border-blue-500/60 rounded-md p-3 w-[200px] min-h-[80px] flex flex-col items-start justify-center gap-1.5 shadow-lg transition-all duration-200 select-none hover:shadow-2xl hover:shadow-blue-500/40 hover:border-blue-400/80"
+          className="relative bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-indigo-500/60 rounded p-3 w-[200px] min-h-[60px] flex flex-col items-start justify-center gap-1.5 shadow-lg transition-all duration-200 select-none cursor-grab hover:shadow-2xl hover:shadow-indigo-500/40 hover:border-indigo-400/80"
         >
           <div className="absolute -top-3 -right-3 flex gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
@@ -69,8 +62,11 @@ export default function InputNode({ id, data }) {
           <hr className="w-full border-slate-700 my-1" />
 
           {isEmpty ? (
-            <div className="text-[11px] font-medium text-slate-400 text-center leading-snug flex items-center gap-1">
-              Double-click to enter some input
+            <div className="flex items-center gap-1.5 w-full">
+              <div className="text-indigo-400">
+                <MdInput size={16} />
+              </div>
+              <span className="text-sm font-bold text-slate-100">Input</span>
             </div>
           ) : (
             <div className="text-[11px] font-medium text-slate-300 text-left leading-snug w-full overflow-hidden text-ellipsis whitespace-nowrap" title={data.value}>
@@ -89,50 +85,22 @@ export default function InputNode({ id, data }) {
       </div>
 
       {showModal && (
-        <div
-          className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center z-[1000]"
-          onMouseDown={handleCancel}
-        >
-          <div
-            className="bg-slate-900 rounded-xl p-4 max-w-[500px] max-h-[400px] shadow-2xl border border-slate-700 flex flex-col"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="m-0 text-xl font-bold text-slate-100">Edit Input</h3>
-              <button
-                onClick={handleCancel}
-                className="bg-transparent border-none text-3xl text-slate-500 cursor-pointer p-0 w-10 h-10 flex items-center justify-center rounded-md transition-all hover:bg-slate-800 hover:text-slate-300"
-                aria-label="Close modal"
-              >
-                ×
-              </button>
-            </div>
-
-            <textarea
-              value={tempValue}
-              onChange={(e) => setTempValue(e.target.value)}
-              placeholder="Type your input here..."
-              className="min-h-[150px] overflow-auto bg-slate-950 rounded-md p-2 font-mono text-base text-slate-100 border border-slate-700 m-0 scrollable resize-none outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-              spellCheck={false}
-              autoFocus
-            />
-
-            <div className="flex gap-3 mt-4">
-              <button
-                onClick={handleCancel}
-                className="flex-1 py-2 px-4 rounded-md border border-slate-600 bg-slate-800 text-slate-200 text-sm font-semibold cursor-pointer transition-all hover:bg-slate-700 hover:border-slate-500"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                className="flex-1 py-2 px-4 rounded-md border border-indigo-500 bg-indigo-600 text-white text-sm font-semibold cursor-pointer transition-all hover:bg-indigo-500 hover:border-indigo-400 shadow-lg shadow-indigo-500/20"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
+        <FunctionInputPanel
+          isOpen={showModal}
+          onClose={handleCancel}
+          onSave={(values, nodeName) => {
+            // For input node, we only use the first value
+            data.onValueChange?.(id, values[0] || "");
+            if (nodeName && data.onNameChange) {
+              data.onNameChange(id, nodeName);
+            }
+            setShowModal(false);
+          }}
+          functionName="Input"
+          nodeName={data.name}
+          connectedArgs={[]}
+          manualArgs={[data.value ?? ""]}
+        />
       )}
     </>
   );

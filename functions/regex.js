@@ -1,12 +1,12 @@
 export function regex(text, pattern, flags = "") {
-    if (typeof text !== "string") return "";
-    try {
-        const re = new RegExp(pattern, flags);
-        const match = text.match(re);
-        return match ? (match[1] || match[0]) : "";
-    } catch (error) {
-        return "";
-    }
+  if (typeof text !== "string") return "";
+  try {
+    const re = new RegExp(pattern, flags);
+    const match = text.match(re);
+    return match ? (match[1] || match[0]) : "";
+  } catch (error) {
+    return "";
+  }
 }
 
 export const regexDescription = `
@@ -22,3 +22,9 @@ Parameters:
 Returns:
   String — The first matching substring or empty string.
 `;
+
+export const regexMetadata = {
+  parameters: ["Text", "Pattern", "Flags"],
+  icon: "/icons/regex.png",
+  hasVariableParams: false
+};

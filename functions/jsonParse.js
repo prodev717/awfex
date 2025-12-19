@@ -1,14 +1,18 @@
-export function jsonParse(str) {
-    return JSON.parse(str);
+export function jsonParse(jsonString) {
+  return JSON.parse(jsonString);
 }
 
 export const jsonParseDescription = `
-jsonParse(str):
-- Converts a JSON string into a JavaScript object.
-
+jsonParse(jsonString):
+- Parses a JSON string into an object.
 Parameters:
-  str: String — Valid JSON string.
-
+  jsonString: String — JSON string to parse.
 Returns:
-  Object — The parsed JSON value.
+  Object — the parsed JSON object.
 `;
+
+export const jsonParseMetadata = {
+  parameters: ["JSON String"],
+  icon: "/icons/json.png",
+  hasVariableParams: false
+};

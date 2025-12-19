@@ -36,11 +36,11 @@ export default function Toolbar({
 
   return (
     <>
-      <div className="px-5 py-3 border-b border-slate-800 flex gap-3 items-center bg-slate-900 shadow-sm">
+      <div className="px-5 py-2 border-b border-slate-800 flex gap-3 items-center bg-slate-900 shadow-sm">
         {!isSidebarCollapsed && (
           <Link
             to="/"
-            className="w-8 h-8 flex items-center justify-center mr-2 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="w-7 h-7 flex items-center justify-center mr-2 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
             title="Go to Home"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,36 +55,18 @@ export default function Toolbar({
           onClick={onRunWorkflow}
           disabled={isRunning || isRunDisabled}
           title={isRunDisabled ? "Fix invalid JSON to run" : "Run Workflow"}
-          className={`py-2 px-4 rounded-md border text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 shadow-lg ${isRunning || isRunDisabled
+          className={`py-1.5 px-3 rounded-md border text-sm font-bold cursor-pointer transition-all shadow-lg ${isRunning || isRunDisabled
             ? "bg-slate-700 border-slate-600 text-slate-400 cursor-not-allowed"
             : "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 hover:border-indigo-400 shadow-indigo-500/20"
             }`}
         >
-          {isRunning ? (
-            <>
-              <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Running...
-            </>
-          ) : (
-            <>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Run
-            </>
-          )}
+          {isRunning ? "Running..." : "Run"}
         </button>
 
         <button
           onClick={() => setShowSaveModal(true)}
-          className="py-2 px-4 rounded-md border border-slate-600 bg-transparent text-slate-300 text-sm font-bold cursor-pointer transition-all flex items-center gap-1.5 hover:bg-slate-800 hover:border-slate-500 hover:text-white"
+          className="py-1.5 px-3 rounded-md border border-slate-600 bg-transparent text-slate-300 text-sm font-bold cursor-pointer transition-all hover:bg-slate-800 hover:border-slate-500 hover:text-white"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-          </svg>
           Save
         </button>
       </div>

@@ -1,14 +1,22 @@
-export function jsonStringify(obj) {
-    return JSON.stringify(obj);
+export function jsonStringify(obj, space = null) {
+  if (space !== null) {
+    return JSON.stringify(obj, null, space);
+  }
+  return JSON.stringify(obj);
 }
 
 export const jsonStringifyDescription = `
-jsonStringify(obj):
-- Converts any JavaScript value into a JSON-formatted string.
-
+jsonStringify(obj, space):
+- Converts an object to a JSON string.
 Parameters:
-  obj: Any — The value or object to serialize.
-
+  obj: Object — the object to stringify.
+  space: Number — optional indentation spaces.
 Returns:
-  String — JSON string representation of the value.
+  String — JSON string representation.
 `;
+
+export const jsonStringifyMetadata = {
+  parameters: ["Object", "Space"],
+  icon: "/icons/json.png",
+  hasVariableParams: false
+};

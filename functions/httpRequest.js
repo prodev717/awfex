@@ -33,3 +33,10 @@ Returns:
     headers: Object — Key-value response headers.
     body: Object — JSON response body.
 `;
+
+// Function metadata for frontend
+export const httpRequestMetadata = {
+  parameters: ["URL", "Method", "Headers", "Body"],
+  icon: "/icons/http.png",
+  hasVariableParams: false
+};

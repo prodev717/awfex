@@ -36,3 +36,9 @@ Examples:
   fn("{ ...$json0, ...$json1 }", json1, json2)
   fn("$json0.items[0].name", json1)
 `;
+
+export const jsonExpressionMetadata = {
+  parameters: ["Expression", "JSON Inputs"],
+  icon: "/icons/jsonExpression.png",
+  hasVariableParams: true
+};

@@ -17,8 +17,7 @@ const nodeTypes = {
 };
 
 export default function Designer() {
-    const [functions, setFunctions] = useState([]);
-    const [descriptions, setDescriptions] = useState({});
+    const [functionMetadata, setFunctionMetadata] = useState({});
     const [selectedFunc, setSelectedFunc] = useState("");
     const [query, setQuery] = useState("");
 
@@ -48,11 +47,18 @@ export default function Designer() {
         loadWorkflow,
         applyAutoLayout,
         clearWorkflow,
-    } = useFlow(descriptions);
+        openModalNodeId,
+        handleOpenModal,
+        handleCloseModal,
+    } = useFlow(functionMetadata);
+
+
 
     useEffect(() => {
-        api.fetchFunctions().then(setFunctions).catch(console.error);
-        api.fetchDescriptions().then(setDescriptions).catch(console.error);
+        // Fetch function metadata from backend
+        api.fetchFunctions().then(metadata => {
+            setFunctionMetadata(metadata);
+        }).catch(console.error);
     }, []);
 
     const workflowJSON = buildWorkflowJSON(nodes, edges);
@@ -150,7 +156,7 @@ export default function Designer() {
                 onSelectWorkflow={handleSelectWorkflow}
                 onDeleteWorkflow={handleDeleteWorkflow}
                 loading={workflowsLoading}
-                functions={functions}
+                functionMetadata={functionMetadata}
                 onAddFunc={(funcName) => addFunctionNode(funcName)}
                 onAddInput={addInputNode}
                 hasNodes={nodes.length > 0}

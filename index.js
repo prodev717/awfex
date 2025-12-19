@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { FUNCTIONS, DESCRIPTIONS, engine } from "./awfex.js";
+import { FUNCTIONS, DESCRIPTIONS, METADATA, engine } from "./awfex.js";
 import { Sequelize, Model, DataTypes } from "sequelize";
 import auth from "./middleware/auth.js";
 import pg from "pg";
@@ -43,10 +43,10 @@ Workflows.init(
 
 await sequelize.sync({ alter: true });
 
-// sends function names
+// Returns function metadata (parameters, icons, descriptions, etc.)
 app.get("/functions", (req, res) => {
   try {
-    res.json(Object.keys(FUNCTIONS));
+    res.json(METADATA);
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
   }
@@ -169,6 +169,7 @@ app.post("/run", auth, async (req, res) => {
     const result = await engine(req.body, req.query);
     res.json({ success: true, result });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ success: false, error: err.message });
   }
 });

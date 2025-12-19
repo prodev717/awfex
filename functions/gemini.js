@@ -54,3 +54,9 @@ Parameters:
 Returns:
   String — The generated text response from Gemini.
 `;
+
+export const geminiMetadata = {
+  parameters: ["API Key", "Model Name", "Input"],
+  icon: "/icons/gemini.png",
+  hasVariableParams: false
+};

@@ -10,3 +10,9 @@ Parameters:
 Returns:
   void — this function does not return anything.
 `;
+
+export const printMetadata = {
+  parameters: ["Value"],
+  icon: "/icons/print.png",
+  hasVariableParams: true
+};

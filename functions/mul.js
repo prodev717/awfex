@@ -1,13 +1,19 @@
-export function mul(a, b) {
-  return a * b;
+export function mul(...args) {
+  if (args.length === 0) return 1;
+  return args.reduce((prod, val) => prod * val, 1);
 }
 
 export const mulDescription = `
-mul(a, b):
-- Multiplies the two input values.
+mul(...args):
+- Multiplies numbers together.
 Parameters:
-  a: Number — the first value.
-  b: Number — the second value.
+  args: Any number of numeric values.
 Returns:
-  Number — the product of a and b.
+  Number — the product of all arguments.
 `;
+
+export const mulMetadata = {
+  parameters: ["A", "B"],
+  icon: "/icons/mul.png",
+  hasVariableParams: true
+};

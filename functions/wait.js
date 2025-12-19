@@ -1,6 +1,6 @@
 export async function wait(milliseconds, input = null) {
-    await new Promise((resolve) => setTimeout(resolve, milliseconds));
-    return input;
+  await new Promise((resolve) => setTimeout(resolve, milliseconds));
+  return input;
 }
 
 export const waitDescription = `
@@ -15,3 +15,9 @@ Parameters:
 Returns:
   Any — The same input value, unchanged.
 `;
+
+export const waitMetadata = {
+  parameters: ["Milliseconds", "Input"],
+  icon: "/icons/wait.png",
+  hasVariableParams: false
+};

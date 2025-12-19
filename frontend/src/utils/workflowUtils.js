@@ -8,9 +8,6 @@ export const countNodes = (workflow) => {
 };
 
 export const buildWorkflowJSON = (nodes, edges) => {
-    const findSources = (target) =>
-        edges.filter((e) => e.target === target).map((e) => e.source);
-
     const resolveNode = (id, visited = new Set()) => {
         if (visited.has(id)) throw new Error("Cycle detected");
         visited.add(id);
@@ -26,8 +23,25 @@ export const buildWorkflowJSON = (nodes, edges) => {
             return !Number.isNaN(num) && String(num) === rawStr ? num : raw;
         }
 
-        const args = findSources(id).map((s) => resolveNode(s, new Set(visited)));
-        return { [node.data?.label ?? "fn"]: args };
+        // Use n8n-style parameter mappings if available
+        if (node.data?.parameterMappings && node.data.parameterMappings.length > 0) {
+            const args = node.data.parameterMappings.map(mapping => {
+                if (mapping.sourceType === 'node' && mapping.sourceNodeId) {
+                    return resolveNode(mapping.sourceNodeId, new Set(visited));
+                } else {
+                    // Manual value
+                    const raw = mapping.manualValue;
+                    if (raw === "") return "";
+                    const rawStr = String(raw).trim();
+                    const num = Number(rawStr);
+                    return !Number.isNaN(num) && String(num) === rawStr ? num : raw;
+                }
+            });
+            return { [node.data?.label ?? "fn"]: args };
+        }
+
+        // Fallback for nodes without mappings (shouldn't happen with new UI)
+        return { [node.data?.label ?? "fn"]: [] };
     };
 
     const finals = nodes.filter((n) => !edges.some((e) => e.source === n.id));
@@ -37,7 +51,7 @@ export const buildWorkflowJSON = (nodes, edges) => {
     return finals.map((n) => resolveNode(n.id));
 };
 
-export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange, descriptions = {}) => {
+export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange, handleArgsChange, functionMetadata = {}) => {
     let newNodes = [];
     let newEdges = [];
     let idCounter = 1;
@@ -83,32 +97,59 @@ export const rebuildFromWorkflow = (workflow, deleteNode, handleInputValueChange
 
         nodeId = genNodeId(fnName);
 
+        // Calculate mappings and build children
+        const mappings = [];
+        let childYOffset = xOffset - totalWidth / 2;
+
+        // Get parameter names from metadata
+        const paramNames = functionMetadata[fnName]?.parameters || [];
+
+        args.forEach((arg, index) => {
+            const paramName = paramNames[index] || `Argument ${index + 1}`;
+
+            if (typeof arg === "object" && arg !== null && !Array.isArray(arg)) {
+                // It's a node connection
+                const w = computeWidth(arg);
+                const childCenter = childYOffset + w / 2;
+                const child = build(arg, depth + 1, childCenter);
+
+                newEdges.push({
+                    id: genEdgeId(child.nodeId, nodeId),
+                    source: child.nodeId,
+                    target: nodeId,
+                });
+
+                mappings.push({
+                    paramName,
+                    sourceType: 'node',
+                    sourceNodeId: child.nodeId,
+                    manualValue: ''
+                });
+
+                childYOffset += w;
+            } else {
+                // It's a manual value (primitive)
+                mappings.push({
+                    paramName,
+                    sourceType: 'manual',
+                    sourceNodeId: null,
+                    manualValue: arg
+                });
+            }
+        });
+
         newNodes.push({
             id: nodeId,
             type: "custom",
             position: { x: depth * 220, y: xOffset * 120 },
             data: {
                 label: fnName,
-                tooltip: descriptions[fnName],
+                tooltip: functionMetadata[fnName]?.description || "",
+                metadata: functionMetadata[fnName] || {},
                 onDelete: deleteNode,
+                onArgsChange: handleArgsChange,
+                parameterMappings: mappings, // Populated mappings
             },
-        });
-
-        let childYOffset = xOffset - totalWidth / 2;
-
-        args.forEach((arg) => {
-            const w = computeWidth(arg);
-            const childCenter = childYOffset + w / 2;
-
-            const child = build(arg, depth + 1, childCenter);
-
-            newEdges.push({
-                id: genEdgeId(child.nodeId, nodeId),
-                source: child.nodeId,
-                target: nodeId,
-            });
-
-            childYOffset += w;
         });
 
         return { nodeId, width: totalWidth };

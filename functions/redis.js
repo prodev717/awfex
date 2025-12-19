@@ -77,3 +77,9 @@ Parameters:
 Returns:
   Any — Stored value, retrieved value, or status string.
 `;
+
+export const redisMetadata = {
+    parameters: ["Action", "Key", "Value", "TTL"],
+    icon: "/icons/redis.png",
+    hasVariableParams: false
+};

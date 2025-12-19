@@ -26,3 +26,9 @@ Parameters:
 Returns:
   Promise<Any> — the result of executing the function or code.
 `;
+
+export const codeMetadata = {
+  parameters: ["Function Code"],
+  icon: "/icons/code.png",
+  hasVariableParams: true
+};

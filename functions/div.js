@@ -1,13 +1,20 @@
 export function div(a, b) {
+  if (b === 0) throw new Error("Division by zero");
   return a / b;
 }
 
 export const divDescription = `
 div(a, b):
-- Divides the first value by the second value.
+- Divides a by b.
 Parameters:
-  a: Number — the numerator.
-  b: Number — the denominator (must not be 0).
+  a: Number — dividend.
+  b: Number — divisor.
 Returns:
-  Number — the result of a divided by b.
+  Number — the quotient.
 `;
+
+export const divMetadata = {
+  parameters: ["A", "B"],
+  icon: "/icons/div.png",
+  hasVariableParams: true
+};

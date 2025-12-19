@@ -1,5 +1,5 @@
 export function array(...args) {
-    return args;
+  return args;
 }
 
 export const arrayDescription = `
@@ -10,3 +10,9 @@ Parameters:
 Returns:
   Array — an array containing all the arguments.
 `;
+
+export const arrayMetadata = {
+  parameters: ["Values"],
+  icon: "/icons/array.png",
+  hasVariableParams: true
+};

@@ -17,3 +17,9 @@ Parameters:
 Returns:
   Number or String — the sum of numbers or the concatenated string.
 `;
+
+export const addMetadata = {
+  parameters: ["A", "B"],
+  icon: "/icons/add.png",
+  hasVariableParams: true
+};

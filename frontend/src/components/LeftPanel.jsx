@@ -1,7 +1,22 @@
 import { useState, useEffect } from "react";
-import { MdDelete, MdChevronLeft, MdChevronRight, MdSettings, MdContentPaste, MdHome } from "react-icons/md";
+import { MdDelete, MdChevronLeft, MdChevronRight, MdSettings, MdContentPaste, MdHome, MdInput } from "react-icons/md";
 import { LuWorkflow } from "react-icons/lu";
 import { RiFunctionAddLine } from "react-icons/ri";
+import {
+  MdAdd,
+  MdRemove,
+  MdClose,
+  MdCode,
+  MdDataObject,
+  MdFilterAlt,
+  MdHttp,
+  MdStorage,
+  MdTimer,
+  MdPrint,
+  MdAutoAwesome,
+  MdCalculate
+} from "react-icons/md";
+import { TbMathFunction } from "react-icons/tb";
 
 export default function LeftPanel({
   isCollapsed,
@@ -16,13 +31,15 @@ export default function LeftPanel({
   query,
   setQuery,
   loading,
-  functions = [],
+  functionMetadata = {},
   selectedFunc,
   setSelectedFunc,
   onAddFunc,
   onAddInput,
   hasNodes = false
 }) {
+  // Extract function names from metadata
+  const functions = Object.keys(functionMetadata);
   const [activeTab, setActiveTab] = useState("workflows");
   const [showJsonModal, setShowJsonModal] = useState(false);
 
@@ -36,10 +53,10 @@ export default function LeftPanel({
   return (
     <div className="relative flex h-full">
       {isCollapsed && (
-        <div className="w-16 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4 gap-2">
+        <div className="w-14 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-2 gap-3">
           <a
             href="/"
-            className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-md transition-all mb-4"
+            className="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-md transition-all"
             title="Go to Home"
           >
             <MdHome size={24} />
@@ -47,7 +64,7 @@ export default function LeftPanel({
 
           <button
             onClick={() => handleTabClick("workflows")}
-            className={`w-12 h-12 flex items-center justify-center rounded-md transition-all ${activeTab === "workflows"
+            className={`w-10 h-10 flex items-center justify-center rounded-md transition-all ${activeTab === "workflows"
               ? "bg-indigo-600 text-white"
               : "text-slate-400 hover:text-indigo-400 hover:bg-slate-800"
               }`}
@@ -57,7 +74,7 @@ export default function LeftPanel({
           </button>
           <button
             onClick={() => handleTabClick("functions")}
-            className={`w-12 h-12 flex items-center justify-center rounded-md transition-all ${activeTab === "functions"
+            className={`w-10 h-10 flex items-center justify-center rounded-md transition-all ${activeTab === "functions"
               ? "bg-indigo-600 text-white"
               : "text-slate-400 hover:text-indigo-400 hover:bg-slate-800"
               }`}
@@ -70,7 +87,7 @@ export default function LeftPanel({
 
           <button
             onClick={() => handleTabClick("settings")}
-            className={`w-12 h-12 flex items-center justify-center rounded-md transition-all ${activeTab === "settings"
+            className={`w-10 h-10 flex items-center justify-center rounded-md transition-all ${activeTab === "settings"
               ? "bg-indigo-600 text-white"
               : "text-slate-400 hover:text-indigo-400 hover:bg-slate-800"
               }`}
@@ -82,7 +99,7 @@ export default function LeftPanel({
       )}
 
       <div
-        className={`flex flex-col h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out text-slate-200 ${isCollapsed ? "w-0 min-w-0 opacity-0 overflow-hidden" : "w-80 min-w-[260px] opacity-100"
+        className={`flex flex-col h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out text-slate-200 ${isCollapsed ? "w-0 min-w-0 opacity-0 overflow-hidden" : "w-80 min-w-[320px] opacity-100"
           }`}
       >
         <div className="flex border-b border-slate-800 bg-slate-900/50">
@@ -143,7 +160,7 @@ export default function LeftPanel({
 
       <button
         onClick={toggleSidebar}
-        className={`absolute top-1/2 -translate-y-1/2 w-6 h-16 bg-slate-900 border-y border-r border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300 shadow-lg z-50 ${isCollapsed ? "left-16 rounded-r-lg" : "left-80 rounded-r-lg"
+        className={`absolute top-1/2 -translate-y-1/2 w-6 h-12 bg-slate-900 border-y border-r border-slate-800 flex items-center justify-center text-slate-400 transition-all duration-300 shadow-lg z-50 ${isCollapsed ? "left-14 rounded-r-lg" : "left-80 rounded-r-lg"
           }`}
         title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
       >
@@ -166,12 +183,37 @@ export default function LeftPanel({
 function FunctionsTab({ functions, onAddFunc, onAddInput }) {
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Icon mapping for different function types
+  const getIcon = (label) => {
+    const iconMap = {
+      add: MdAdd,
+      sub: MdRemove,
+      mul: MdClose,
+      div: MdCalculate,
+      print: MdPrint,
+      code: MdCode,
+      jsonParse: MdDataObject,
+      jsonStringify: MdDataObject,
+      jsonExpression: MdDataObject,
+      jsonFilter: MdFilterAlt,
+      httpRequest: MdHttp,
+      postgres: MdStorage,
+      redis: MdStorage,
+      wait: MdTimer,
+      gemini: MdAutoAwesome,
+      array: MdDataObject,
+      regex: MdCode,
+    };
+    const IconComponent = iconMap[label] || TbMathFunction;
+    return IconComponent;
+  };
+
   const filteredFunctions = functions.filter((func) =>
     func.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="flex-1 flex flex-col p-3 gap-3 overflow-y-auto scrollable">
+    <div className="flex-1 flex flex-col p-3 gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div className="flex justify-between items-center">
         <h3 className="m-0 text-sm font-bold text-slate-200">Add Nodes</h3>
         <div className="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2 py-1 rounded">
@@ -181,8 +223,9 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
 
       <button
         onClick={onAddInput}
-        className="w-full py-2.5 px-4 rounded-md border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20"
+        className="w-full py-2.5 px-4 rounded-md border border-blue-500/50 bg-blue-600 text-white text-sm font-semibold cursor-pointer transition-all hover:bg-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
       >
+        <MdInput size={18} />
         Add Input Node
       </button>
 
@@ -225,12 +268,15 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
               <button
                 key={func}
                 onClick={() => onAddFunc(func)}
-                className="group relative w-full py-3 px-3 rounded-md border-2 border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 text-slate-200 text-xs font-semibold cursor-pointer transition-all hover:border-indigo-500 hover:from-indigo-600 hover:to-indigo-700 hover:text-white hover:shadow-xl hover:shadow-indigo-500/30 hover:scale-105 text-left capitalize active:scale-95"
+                className="group relative w-full py-2.5 px-3 rounded-md border border-slate-700 bg-slate-800 text-slate-200 text-xs font-semibold cursor-pointer transition-all hover:bg-slate-700 hover:border-slate-600 text-left capitalize"
                 title={`Add ${func} node`}
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-slate-700 group-hover:bg-indigo-500 flex items-center justify-center transition-colors">
-                    <RiFunctionAddLine size={14} />
+                  <div className="w-6 h-6 rounded-md bg-slate-700 group-hover:bg-slate-600 flex items-center justify-center transition-colors">
+                    {(() => {
+                      const IconComponent = getIcon(func);
+                      return <IconComponent size={14} />;
+                    })()}
                   </div>
                   <span className="flex-1 truncate">{func}</span>
                 </div>
@@ -378,7 +424,7 @@ function WorkflowsTab({ workflows, onSelectWorkflow, onDeleteWorkflow, query, se
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-2 mt-2 overflow-y-auto scrollable flex-1">
+          <div className="flex flex-col gap-2 mt-2 overflow-y-auto flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {workflows.map((workflow) => (
               <div
                 key={workflow.id}

@@ -1,13 +1,22 @@
-export function sub(a, b) {
-  return a - b;
+export function sub(...args) {
+  if (args.length === 0) return 0;
+  if (args.every(v => typeof v === "number")) {
+    return args.reduce((diff, val, idx) => idx === 0 ? val : diff - val, 0);
+  }
+  return NaN;
 }
 
 export const subDescription = `
-sub(a, b):
-- Subtracts the second value from the first.
+sub(...args):
+- Subtracts numbers in sequence.
 Parameters:
-  a: Number — the value to subtract from.
-  b: Number — the value to subtract.
+  args: Any number of numeric values.
 Returns:
-  Number — the result of a - b.
+  Number — the result of sequential subtraction.
 `;
+
+export const subMetadata = {
+  parameters: ["A", "B"],
+  icon: "/icons/sub.png",
+  hasVariableParams: true
+};

@@ -44,3 +44,9 @@ Parameters:
 Returns:
   Object — The query output (rows for SELECT, metadata for INSERT/UPDATE/DELETE).
 `;
+
+export const postgresMetadata = {
+    parameters: ["Database URL", "SQL Query"],
+    icon: "/icons/postgres.png",
+    hasVariableParams: false
+};

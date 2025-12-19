@@ -1,5 +1,5 @@
 export function jsonFilter(key) {
-    return key?.value;
+  return key?.value;
 }
 
 export const jsonFilterDescription = `
@@ -12,3 +12,9 @@ Parameters:
 Returns:
   Object — The filtered JSON object.
 `;
+
+export const jsonFilterMetadata = {
+  parameters: ["Key"],
+  icon: "/icons/jsonFilter.png",
+  hasVariableParams: false
+};

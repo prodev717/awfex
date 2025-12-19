@@ -1,22 +1,22 @@
 import { config } from "dotenv";
 config();
 
-import { add, addDescription } from "./functions/add.js";
-import { sub, subDescription } from "./functions/sub.js";
-import { mul, mulDescription } from "./functions/mul.js";
-import { div, divDescription } from "./functions/div.js";
-import { print, printDescription } from "./functions/print.js";
-import { gemini, geminiDescription } from "./functions/gemini.js";
-import { wait, waitDescription } from "./functions/wait.js";
-import { jsonParse, jsonParseDescription } from "./functions/jsonParse.js";
-import { jsonStringify, jsonStringifyDescription } from "./functions/jsonStringify.js";
-import { httpRequest, httpRequestDescription } from "./functions/httpRequest.js";
-import { postgres, postgresDescription } from "./functions/postgres.js";
-import { regex, regexDescription } from "./functions/regex.js";
-import { redis, redisDescription } from "./functions/redis.js";
-import { code, codeDescription } from "./functions/code.js";
-import { array, arrayDescription } from "./functions/array.js";
-import { jsonExpression, jsonExpressionDescription } from "./functions/jsonExpression.js";
+import { add, addDescription, addMetadata } from "./functions/add.js";
+import { sub, subDescription, subMetadata } from "./functions/sub.js";
+import { mul, mulDescription, mulMetadata } from "./functions/mul.js";
+import { div, divDescription, divMetadata } from "./functions/div.js";
+import { print, printDescription, printMetadata } from "./functions/print.js";
+import { gemini, geminiDescription, geminiMetadata } from "./functions/gemini.js";
+import { wait, waitDescription, waitMetadata } from "./functions/wait.js";
+import { jsonParse, jsonParseDescription, jsonParseMetadata } from "./functions/jsonParse.js";
+import { jsonStringify, jsonStringifyDescription, jsonStringifyMetadata } from "./functions/jsonStringify.js";
+import { httpRequest, httpRequestDescription, httpRequestMetadata } from "./functions/httpRequest.js";
+import { postgres, postgresDescription, postgresMetadata } from "./functions/postgres.js";
+import { regex, regexDescription, regexMetadata } from "./functions/regex.js";
+import { redis, redisDescription, redisMetadata } from "./functions/redis.js";
+import { code, codeDescription, codeMetadata } from "./functions/code.js";
+import { array, arrayDescription, arrayMetadata } from "./functions/array.js";
+import { jsonExpression, jsonExpressionDescription, jsonExpressionMetadata } from "./functions/jsonExpression.js";
 
 export const FUNCTIONS = {
   add,
@@ -54,6 +54,27 @@ export const DESCRIPTIONS = {
   code: codeDescription,
   array: arrayDescription,
   jsonExpression: jsonExpressionDescription,
+};
+
+// Function metadata (parameters, icons, variable params flag)
+export const METADATA = {
+  add: { description: addDescription, ...addMetadata },
+  sub: { description: subDescription, ...subMetadata },
+  mul: { description: mulDescription, ...mulMetadata },
+  div: { description: divDescription, ...divMetadata },
+  jsonParse: { description: jsonParseDescription, ...jsonParseMetadata },
+  jsonStringify: { description: jsonStringifyDescription, ...jsonStringifyMetadata },
+  httpRequest: { description: httpRequestDescription, ...httpRequestMetadata },
+  // Default metadata for functions without explicit metadata
+  print: { description: printDescription, ...printMetadata },
+  gemini: { description: geminiDescription, ...geminiMetadata },
+  wait: { description: waitDescription, ...waitMetadata },
+  postgres: { description: postgresDescription, ...postgresMetadata },
+  regex: { description: regexDescription, ...regexMetadata },
+  redis: { description: redisDescription, ...redisMetadata },
+  code: { description: codeDescription, ...codeMetadata },
+  array: { description: arrayDescription, ...arrayMetadata },
+  jsonExpression: { description: jsonExpressionDescription, ...jsonExpressionMetadata },
 };
 
 function convertIfNumeric(str) {

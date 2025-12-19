@@ -1,4 +1,4 @@
-import ReactFlow, { Background, Controls, MiniMap } from "reactflow";
+import ReactFlow, { Background } from "reactflow";
 import "reactflow/dist/style.css";
 
 export default function FlowCanvas({
@@ -37,26 +37,6 @@ export default function FlowCanvas({
         }}
       >
         <Background />
-        <Controls
-          showInteractive={false}
-          style={{
-            backgroundColor: '#020617',
-            border: '1px solid #1e293b'
-          }}
-        />
-        <MiniMap
-          position="bottom-left"
-          style={{
-            backgroundColor: '#020617',
-            border: '1px solid #1e293b',
-            width: 130,
-            height: 107,
-            bottom: 0,
-            left: 10,
-          }}
-          nodeColor="#334155"
-          maskColor="rgba(2, 6, 23, 0.6)"
-        />
       </ReactFlow>
 
       <div className="absolute bottom-3 right-3 flex gap-2 z-10">
