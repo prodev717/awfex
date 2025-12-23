@@ -44,7 +44,6 @@ export default function FlowCanvas({
           style={{
             backgroundColor: '#1e293b',
             height: 100,
-            width: 150,
             borderRadius: 8,
             border: '1px solid #334155'
           }}
@@ -53,7 +52,11 @@ export default function FlowCanvas({
           }}
           position="bottom-left"
         />
-        <Controls position="bottom-left" className="!border-slate-700 !text-slate-300 [&>button]:!border-slate-700 [&>button:hover]:!bg-slate-700 !w-fit !h-fit !p-1 !rounded-md !shadow-lg" />
+        <Controls
+          position="bottom-left"
+          showInteractive={false}
+          className="!border-slate-700 !text-slate-300 [&>button]:!border-slate-700 [&>button:hover]:!bg-slate-700 !w-fit !h-fit !p-1 !rounded-md !shadow-lg"
+        />
       </ReactFlow>
 
       <div className="absolute bottom-3 right-3 flex gap-2 z-10">

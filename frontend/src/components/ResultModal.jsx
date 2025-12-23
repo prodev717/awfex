@@ -47,8 +47,8 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                         <button
                             onClick={handleCopy}
                             className={`px-3 py-1.5 border rounded-md cursor-pointer text-sm transition-all duration-200 active:scale-95 ${copyFeedback
-                                    ? 'bg-emerald-500 text-slate-900 border-emerald-500 font-semibold shadow-lg shadow-emerald-500/30'
-                                    : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:border-slate-600 hover:shadow-md'
+                                ? 'bg-emerald-500 text-slate-900 border-emerald-500 font-semibold shadow-lg shadow-emerald-500/30'
+                                : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:border-slate-600 hover:shadow-md'
                                 }`}
                         >
                             {copyFeedback ? "✓ Copied!" : "📋 Copy"}
@@ -72,23 +72,42 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                         <div className="bg-slate-950 p-4 rounded-md overflow-x-auto text-sm text-slate-200 border border-slate-800">
                             <ReactMarkdown
                                 components={{
-                                    h1: ({ node, ...props }) => <h1 className="text-emerald-400 font-bold text-2xl my-2" {...props} />,
-                                    h2: ({ node, ...props }) => <h2 className="text-emerald-400 font-semibold text-xl my-2" {...props} />,
-                                    h3: ({ node, ...props }) => <h3 className="text-emerald-400 font-semibold text-lg my-2" {...props} />,
-                                    code: ({ node, inline, ...props }) =>
+                                    h1: ({ ...props }) => <h1 className="text-2xl font-bold text-slate-100 mt-6 mb-4 border-b border-slate-800 pb-2" {...props} />,
+                                    h2: ({ ...props }) => <h2 className="text-xl font-bold text-slate-200 mt-5 mb-3" {...props} />,
+                                    h3: ({ ...props }) => <h3 className="text-lg font-semibold text-emerald-400 mt-4 mb-2" {...props} />,
+                                    h4: ({ ...props }) => <h4 className="text-base font-semibold text-slate-300 mt-3 mb-2" {...props} />,
+                                    h5: ({ ...props }) => <h5 className="text-sm font-semibold text-slate-400 mt-2 mb-1" {...props} />,
+                                    h6: ({ ...props }) => <h6 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-2 mb-1" {...props} />,
+                                    p: ({ ...props }) => <p className="text-slate-300 leading-relaxed mb-4 text-sm" {...props} />,
+                                    ul: ({ ...props }) => <ul className="list-disc list-outside ml-6 mb-4 space-y-1 text-slate-300 text-sm" {...props} />,
+                                    ol: ({ ...props }) => <ol className="list-decimal list-outside ml-6 mb-4 space-y-1 text-slate-300 text-sm" {...props} />,
+                                    li: ({ ...props }) => <li className="pl-1" {...props} />,
+                                    a: ({ ...props }) => <a className="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 transition-colors" target="_blank" rel="noopener noreferrer" {...props} />,
+                                    blockquote: ({ ...props }) => <blockquote className="border-l-4 border-slate-700 pl-4 py-1 my-4 bg-slate-900/50 italic text-slate-400 rounded-r text-sm" {...props} />,
+                                    code: ({ inline, ...props }) =>
                                         inline ? (
-                                            <code className="bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono text-sm" {...props} />
+                                            <code className="bg-slate-800 text-indigo-300 px-1.5 py-0.5 rounded font-mono text-xs border border-slate-700/50" {...props} />
                                         ) : (
-                                            <code className="block bg-slate-900 p-3 rounded overflow-x-auto text-blue-300 font-mono text-sm border border-slate-800" {...props} />
+                                            <code className="block w-full font-mono text-xs text-blue-300 bg-transparent p-0" {...props} />
                                         ),
-                                    pre: ({ node, ...props }) => <pre className="bg-slate-900 p-3 rounded overflow-x-auto border border-slate-800 my-2" {...props} />,
-                                    a: ({ node, ...props }) => <a className="text-blue-400 underline hover:text-blue-300 transition-colors" {...props} />,
-                                    ul: ({ node, ...props }) => <ul className="ml-6 list-disc" {...props} />,
-                                    ol: ({ node, ...props }) => <ol className="ml-6 list-decimal" {...props} />,
-                                    li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                                    p: ({ node, ...props }) => <p className="my-2" {...props} />,
-                                    strong: ({ node, ...props }) => <strong className="text-yellow-300 font-semibold" {...props} />,
-                                    em: ({ node, ...props }) => <em className="text-blue-300 italic" {...props} />,
+                                    pre: ({ ...props }) => (
+                                        <div className="relative my-4 rounded-lg overflow-hidden border border-slate-800 bg-slate-900">
+                                            <div className="absolute top-2 right-2 flex gap-1.5">
+                                                <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                                <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                                <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                            </div>
+                                            <pre className="p-4 pt-8 overflow-x-auto" {...props} />
+                                        </div>
+                                    ),
+                                    table: ({ ...props }) => <div className="overflow-x-auto my-6 rounded-lg border border-slate-800"><table className="w-full text-left text-sm text-slate-300" {...props} /></div>,
+                                    thead: ({ ...props }) => <thead className="bg-slate-900 text-slate-200 uppercase text-xs font-semibold" {...props} />,
+                                    tbody: ({ ...props }) => <tbody className="divide-y divide-slate-800" {...props} />,
+                                    tr: ({ ...props }) => <tr className="hover:bg-slate-800/50 transition-colors" {...props} />,
+                                    th: ({ ...props }) => <th className="px-4 py-3 whitespace-nowrap" {...props} />,
+                                    td: ({ ...props }) => <td className="px-4 py-3 whitespace-nowrap" {...props} />,
+                                    hr: ({ ...props }) => <hr className="my-8 border-slate-800" {...props} />,
+                                    img: ({ ...props }) => <img className="rounded-lg border border-slate-800 my-4 max-w-full h-auto" {...props} />,
                                 }}
                             >
                                 {contentText}

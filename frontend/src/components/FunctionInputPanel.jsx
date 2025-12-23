@@ -140,7 +140,12 @@ export default function FunctionInputPanel({
     };
 
     const handleSave = () => {
-        onSave(parameterMappings, currentNodeName);
+        const trimmedNodeName = currentNodeName.trim();
+        const trimmedMappings = parameterMappings.map(mapping => ({
+            ...mapping,
+            manualValue: mapping.sourceType === 'manual' ? (mapping.manualValue || '').trim() : mapping.manualValue
+        }));
+        onSave(trimmedMappings, trimmedNodeName);
     };
 
     if (!isOpen) return null;
