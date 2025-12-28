@@ -83,7 +83,6 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
           </div>
         </div>
 
-        {/* Content - Scrollable with custom indigo scrollbar */}
         <div className="flex-1 overflow-y-auto mb-6 scroll-smooth pr-3 scrollbar-thin scrollbar-thumb-indigo-600/80 scrollbar-thumb-rounded scrollbar-track-slate-900/50 scrollbar-track-rounded scrollbar-hover:indigo-600/90 hover:scrollbar-thumb-indigo-600/90">
           {error ? (
             <div className="text-red-300 p-6 bg-gradient-to-br from-red-900/20 to-red-950/30 border border-red-900/40 rounded-xl backdrop-blur-md text-sm leading-relaxed shadow-lg shadow-red-950/50 max-w-none">
@@ -98,7 +97,55 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
             <div className="prose prose-slate max-w-none prose-headings:!font-bold prose-headings:!scroll-mt-20 prose-a:!no-underline prose-pre:!bg-slate-900/90 prose-pre:!backdrop-blur-sm prose-code:!bg-slate-900/80 prose-code:!backdrop-blur prose-code:!px-1.5 prose-code:!py-0.5 prose-code:!text-xs prose-hr:!border-slate-700 prose-table:!border-slate-800 prose-th:!bg-slate-900/50">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                rehypePlugins={[
+                  rehypeRaw,
+                  [
+                    rehypeSanitize,
+                    {
+                      clobberNobr: true,
+                      allowElements: [
+                        "a",
+                        "p",
+                        "br",
+                        "span",
+                        "em",
+                        "strong",
+                        "h1",
+                        "h2",
+                        "h3",
+                        "h4",
+                        "h5",
+                        "h6",
+                        "ul",
+                        "ol",
+                        "li",
+                        "code",
+                        "pre",
+                        "blockquote",
+                        "hr",
+                        "table",
+                        "thead",
+                        "tbody",
+                        "tr",
+                        "th",
+                        "td",
+                        "img",
+                      ],
+                    },
+                  ],
+                ]}
+                remarkRehypeOptions={{
+                  passThrough: [
+                    "element",
+                    "table",
+                    "thead",
+                    "tbody",
+                    "tr",
+                    "th",
+                    "td",
+                    "caption",
+                  ],
+                }}
                 components={{
                   h1: ({ node, ...props }) => (
                     <h1
@@ -154,6 +201,28 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                   ),
                   code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || "");
+                    const text = String(children).trim();
+
+                    // Auto-format ISO timestamps
+                    if (!inline && text.match(/^\d{4}-\d{2}-\d{2}T/)) {
+                      const date = new Date(text);
+                      const formatted = date.toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: true,
+                        timeZoneName: "short",
+                      });
+                      return (
+                        <div className="my-4 p-4 bg-gradient-to-r from-indigo-900/30 to-slate-900/50 rounded-xl border border-indigo-800/50">
+                          <div className="text-indigo-300 font-mono text-sm mb-1">{text}</div>
+                          <div className="text-slate-400 text-xs font-medium">{formatted}</div>
+                        </div>
+                      );
+                    }
 
                     if (!inline && match) {
                       return (
@@ -187,7 +256,7 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                         style={{
                           display: "inline",
                           backgroundColor: "rgba(15, 23, 42, 0.85)",
-                          color: "#4f46e5", // indigo-500
+                          color: "#4f46e5",
                           padding: "0.125em 0.375em",
                           margin: "0 0.125em",
                           borderRadius: "0.375rem",
@@ -206,7 +275,7 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                   },
                   table: ({ node, ...props }) => (
                     <div className="overflow-x-auto my-8 rounded-xl border border-slate-800/50 shadow-xl shadow-slate-900/20 backdrop-blur-md w-full">
-                      <table className="w-full text-sm min-w-full" {...props} />
+                      <table className="w-full text-sm min-w-full table-auto border-collapse border-spacing-0" {...props} />
                     </div>
                   ),
                   thead: ({ node, ...props }) => (
@@ -219,10 +288,10 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
                     <tr className="hover:bg-slate-800/30 transition-all duration-150 border-b border-slate-800/30 last:border-b-0" {...props} />
                   ),
                   th: ({ node, ...props }) => (
-                    <th className="px-6 py-4 text-left font-bold whitespace-nowrap backdrop-blur-sm" {...props} />
+                    <th className="px-6 py-4 text-left font-bold whitespace-nowrap backdrop-blur-sm bg-slate-900/50 border border-slate-800/50" {...props} />
                   ),
                   td: ({ node, ...props }) => (
-                    <td className="px-6 py-4 align-top" {...props} />
+                    <td className="px-6 py-4 align-top border border-slate-800/30" {...props} />
                   ),
                   img: ({ node, ...props }) => (
                     <div className="my-8 flex justify-center">
@@ -241,7 +310,7 @@ export default function ResultModal({ isOpen, onClose, result, error }) {
               </ReactMarkdown>
             </div>
           ) : (
-            <pre className="bg-gradient-to-br from-slate-950/90 to-slate-900/90 p-6 rounded-2xl overflow-x-auto font-mono text-sm leading-relaxed border border-slate-800/50 shadow-2xl shadow-slate-900/30 backdrop-blur-xl whitespace-pre-wrap break-words m-0 text-indigo-300 font-medium text-base max-h-full">
+            <pre className="bg-gradient-to-br from-slate-950/90 to-slate-900/90 p-6 rounded-2xl overflow-x-auto font-mono text-sm leading-relaxed border border-slate-800/50 shadow-2xl shadow-slate-900/30 backdrop-blur-xl whitespace-pre-wrap break-words m-0 text-indigo-300 font-medium text-base max-h-full custom-scrollbar">
               {contentText}
             </pre>
           )}
