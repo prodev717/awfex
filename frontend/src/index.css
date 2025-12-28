@@ -182,3 +182,18 @@ body {
 .react-flow__edge-path {
   stroke: #6366f1 !important;
 }
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-slate-900/50 rounded;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-indigo-600/80 rounded hover:bg-indigo-600/90;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-indigo-600/90;
+  }
+}
