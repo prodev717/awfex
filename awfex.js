@@ -18,7 +18,8 @@ import { code, codeDescription, codeMetadata } from "./functions/code.js";
 import { array, arrayDescription, arrayMetadata } from "./functions/array.js";
 import { jsonExpression, jsonExpressionDescription, jsonExpressionMetadata } from "./functions/jsonExpression.js";
 import { gmail, gmailDescription, gmailMetadata } from "./functions/gmail.js";
-import { telegram, telegramDescription, telegramMetadata } from "./functions/telegram.js";
+import { telegramSendMessage, telegramSendMessageDescription, telegramSendMessageMetadata } from "./functions/telegram.js";
+import { telegramGetUpdates, telegramGetUpdatesDescription, telegramGetUpdatesMetadata } from "./functions/telegramGetUpdates.js";
 
 export const FUNCTIONS = {
   add,
@@ -38,7 +39,8 @@ export const FUNCTIONS = {
   array,
   jsonExpression,
   gmail,
-  telegram,
+  telegramSendMessage,
+  telegramGetUpdates,
 };
 
 export const DESCRIPTIONS = {
@@ -59,7 +61,8 @@ export const DESCRIPTIONS = {
   array: arrayDescription,
   jsonExpression: jsonExpressionDescription,
   gmail: gmailDescription,
-  telegram: telegramDescription,
+  telegramSendMessage: telegramSendMessageDescription,
+  telegramGetUpdates: telegramGetUpdatesDescription,
 };
 
 // Function metadata (parameters, icons, variable params flag)
@@ -82,7 +85,8 @@ export const METADATA = {
   array: { description: arrayDescription, ...arrayMetadata },
   jsonExpression: { description: jsonExpressionDescription, ...jsonExpressionMetadata },
   gmail: { description: gmailDescription, ...gmailMetadata },
-  telegram: { description: telegramDescription, ...telegramMetadata },
+  telegramSendMessage: { description: telegramSendMessageDescription, ...telegramSendMessageMetadata },
+  telegramGetUpdates: { description: telegramGetUpdatesDescription, ...telegramGetUpdatesMetadata},
 };
 
 function convertIfNumeric(str) {
