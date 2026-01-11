@@ -15,6 +15,6 @@ Returns:
 
 export const divMetadata = {
   parameters: ["A", "B"],
-  icon: "/icons/div.png",
+  icon: "https://img.icons8.com/color/48/divide.png",
   hasVariableParams: true
 };

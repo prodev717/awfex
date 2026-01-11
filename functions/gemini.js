@@ -57,6 +57,6 @@ Returns:
 
 export const geminiMetadata = {
   parameters: ["API Key", "Model Name", "Input"],
-  icon: "/icons/gemini.png",
+  icon: "https://img.icons8.com/color/48/google-logo.png",
   hasVariableParams: false
 };

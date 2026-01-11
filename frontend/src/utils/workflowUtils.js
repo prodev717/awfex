@@ -1,10 +1,29 @@
 export const countNodes = (workflow) => {
     if (!workflow) return 0;
+
+    // Primitives at the top level (orphans) count as 1
     if (typeof workflow !== 'object') return 1;
+
     if (Array.isArray(workflow)) {
         return workflow.reduce((acc, item) => acc + countNodes(item), 0);
     }
-    return Object.values(workflow).reduce((acc, val) => acc + countNodes(val), 1);
+
+    // For objects (Function Nodes):
+    // Count 1 for the node itself.
+    // Plus count nodes in its arguments.
+    // Primitives in arguments are NOT counted (they are manual params).
+    return 1 + Object.values(workflow).reduce((acc, args) => {
+        if (Array.isArray(args)) {
+            return acc + args.reduce((sum, arg) => {
+                // Only count child args if they are objects (sub-nodes)
+                if (typeof arg === 'object' && arg !== null) {
+                    return sum + countNodes(arg);
+                }
+                return sum;
+            }, 0);
+        }
+        return acc;
+    }, 0);
 };
 
 export const buildWorkflowJSON = (nodes, edges) => {

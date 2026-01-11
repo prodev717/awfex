@@ -25,6 +25,6 @@ Returns:
 
 export const regexMetadata = {
   parameters: ["Text", "Pattern", "Flags"],
-  icon: "/icons/regex.png",
+  icon: "https://img.icons8.com/color/48/code.png",
   hasVariableParams: false
 };

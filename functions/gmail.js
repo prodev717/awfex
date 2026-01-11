@@ -43,15 +43,15 @@ export async function gmail(
       textArray.length === 0
         ? null
         : textArray.length === 1
-        ? textArray[0]
-        : textArray[i];
+          ? textArray[0]
+          : textArray[i];
 
     const htmlContent =
       htmlArray.length === 0
         ? null
         : htmlArray.length === 1
-        ? htmlArray[0]
-        : htmlArray[i];
+          ? htmlArray[0]
+          : htmlArray[i];
 
     // Allow text-only, html-only, or both
     if (!to || (!text && !htmlContent)) {
@@ -122,6 +122,6 @@ Returns:
 
 export const gmailMetadata = {
   parameters: ["User Email", "App Password", "To", "Subject", "Text", "HTML"],
-  icon: "/icons/gmail.png",
+  icon: "https://img.icons8.com/color/48/gmail.png",
   hasVariableParams: false,
 };

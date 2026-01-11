@@ -15,6 +15,6 @@ Returns:
 export const mulMetadata = {
   parameters: [], // Variable number of arguments
   variableParamName: "Value",
-  icon: "/icons/mul.png",
+  icon: "https://img.icons8.com/color/48/multiply.png",
   hasVariableParams: true
 };

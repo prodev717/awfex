@@ -14,6 +14,6 @@ Returns:
 export const arrayMetadata = {
   parameters: [],
   variableParamName: "Item",
-  icon: "/icons/array.png",
+  icon: "https://img.icons8.com/color/48/list.png",
   hasVariableParams: true
 };

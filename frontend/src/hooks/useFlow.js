@@ -81,6 +81,34 @@ export function useFlow(functionMetadata = {}) {
         localStorage.setItem('workflow-edges', JSON.stringify(edges));
     }, [edges]);
 
+    // Sync nodes with latest functionMetadata (e.g. for icons)
+    useEffect(() => {
+        if (Object.keys(functionMetadata).length === 0) return;
+
+        setNodes((currentNodes) =>
+            currentNodes.map((node) => {
+                if (node.type === "custom" && node.data?.label) {
+                    const meta = functionMetadata[node.data.label];
+                    if (meta) {
+                        // Only update if metadata is actually different/missing to avoid loops?
+                        // profound check is expensive, but replacing the reference is fine if controlled.
+                        // However, checking if icon matches might be a good optimization, 
+                        // but for now, just updating ensuring latest data is safer.
+                        return {
+                            ...node,
+                            data: {
+                                ...node.data,
+                                metadata: meta,
+                                tooltip: meta.description || node.data.tooltip
+                            }
+                        };
+                    }
+                }
+                return node;
+            })
+        );
+    }, [functionMetadata]);
+
     const onNodesChange = useCallback(
         (c) => setNodes((nodes) => applyNodeChanges(c, nodes)),
         []

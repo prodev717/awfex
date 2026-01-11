@@ -63,6 +63,6 @@ Returns:
 
 export const telegramGetUpdatesMetadata = {
   parameters: ["Bot Token", "Options"],
-  icon: "/icons/telegram.png",
+  icon: "https://img.icons8.com/color/48/telegram-app.png",
   hasVariableParams: false,
 };

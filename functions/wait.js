@@ -18,6 +18,6 @@ Returns:
 
 export const waitMetadata = {
   parameters: ["Milliseconds", "Input"],
-  icon: "/icons/wait.png",
+  icon: "https://img.icons8.com/color/48/clock--v1.png",
   hasVariableParams: false
 };

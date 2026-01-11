@@ -14,6 +14,6 @@ Returns:
 export const printMetadata = {
   parameters: [],
   variableParamName: "Value",
-  icon: "/icons/print.png",
+  icon: "https://img.icons8.com/color/48/print.png",
   hasVariableParams: true
 };

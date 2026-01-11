@@ -17,6 +17,6 @@ Returns:
 
 export const jsonStringifyMetadata = {
   parameters: ["Object", "Space"],
-  icon: "/icons/json.png",
+  icon: "https://img.icons8.com/color/48/json.png",
   hasVariableParams: false
 };

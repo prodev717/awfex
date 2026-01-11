@@ -5,7 +5,7 @@ export async function telegramSendMessage(botToken, chatIds, texts, options = {}
     const results = [];
     for (let i = 0; i < chatIdArray.length; i++) {
         const chat_id = chatIdArray[i];
-        const text = textArray.length === 1 ? textArray[0] : textArray[i];        
+        const text = textArray.length === 1 ? textArray[0] : textArray[i];
         if (typeof text !== "string") {
             results.push({
                 success: false,
@@ -79,8 +79,8 @@ Returns:
     results: Array of per-message results
 `;
 
-export const telegramSendMessageMetadata = { 
-    parameters: ["Bot Token", "Chat ID", "Text", "Options"], 
-    icon: "/icons/telegram.png", 
-    hasVariableParams: false, 
+export const telegramSendMessageMetadata = {
+    parameters: ["Bot Token", "Chat ID", "Text", "Options"],
+    icon: "https://img.icons8.com/color/48/telegram-app.png",
+    hasVariableParams: false,
 };

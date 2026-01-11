@@ -17,6 +17,6 @@ Returns:
 
 export const subMetadata = {
   parameters: ["A", "B"],
-  icon: "/icons/sub.png",
+  icon: "https://img.icons8.com/color/48/minus.png",
   hasVariableParams: true
 };

@@ -37,6 +37,6 @@ Returns:
 // Function metadata for frontend
 export const httpRequestMetadata = {
   parameters: ["URL", "Method", "Headers", "Body"],
-  icon: "/icons/http.png",
+  icon: "https://img.icons8.com/color/48/api.png",
   hasVariableParams: false
 };

@@ -13,6 +13,6 @@ Returns:
 
 export const jsonParseMetadata = {
   parameters: ["JSON String"],
-  icon: "/icons/json.png",
+  icon: "https://img.icons8.com/color/48/json.png",
   hasVariableParams: false
 };

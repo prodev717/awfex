@@ -80,6 +80,6 @@ Returns:
 
 export const redisMetadata = {
     parameters: ["Action", "Key", "Value", "TTL"],
-    icon: "/icons/redis.png",
+    icon: "https://img.icons8.com/color/48/redis.png",
     hasVariableParams: false
 };

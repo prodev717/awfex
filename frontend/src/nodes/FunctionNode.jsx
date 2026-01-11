@@ -23,7 +23,25 @@ export default function FunctionNode({ id, data }) {
   const [showPanel, setShowPanel] = useState(false);
 
   // Icon mapping for different function types
+  // Icon mapping for different function types
   const getIcon = (label) => {
+    // Check metadata for icon URL
+    if (data.metadata?.icon) {
+      return (
+        <img
+          src={data.metadata.icon}
+          alt={label}
+          className="w-4 h-4 object-contain"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            // We can't easily swap to component here without state, 
+            // but hiding broken image is better than showing it.
+            // Ideally we'd have a sibling component for fallback.
+          }}
+        />
+      );
+    }
+
     const iconMap = {
       add: MdAdd,
       sub: MdRemove,

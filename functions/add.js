@@ -21,6 +21,6 @@ Returns:
 export const addMetadata = {
   parameters: [], // Variable number of arguments
   variableParamName: "Value",
-  icon: "/icons/add.png",
+  icon: "https://img.icons8.com/color/48/plus--v1.png",
   hasVariableParams: true
 };

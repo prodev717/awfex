@@ -40,6 +40,6 @@ Examples:
 export const jsonExpressionMetadata = {
   parameters: ["Expression", "JSON Inputs"],
   variableParamName: "JSON Input",
-  icon: "/icons/jsonExpression.png",
+  icon: "https://img.icons8.com/color/48/json.png",
   hasVariableParams: true
 };

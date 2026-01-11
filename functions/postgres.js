@@ -47,6 +47,6 @@ Returns:
 
 export const postgresMetadata = {
     parameters: ["Database URL", "SQL Query"],
-    icon: "/icons/postgres.png",
+    icon: "https://img.icons8.com/color/48/postgreesql.png",
     hasVariableParams: false
 };

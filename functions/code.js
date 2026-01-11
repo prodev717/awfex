@@ -30,6 +30,6 @@ Returns:
 export const codeMetadata = {
   parameters: ["Function Code"],
   variableParamName: "Arg",
-  icon: "/icons/code.png",
+  icon: "https://img.icons8.com/color/48/code.png",
   hasVariableParams: true
 };

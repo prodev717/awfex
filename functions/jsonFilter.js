@@ -15,6 +15,6 @@ Returns:
 
 export const jsonFilterMetadata = {
   parameters: ["Key"],
-  icon: "/icons/jsonFilter.png",
+  icon: "https://img.icons8.com/color/48/filter.png",
   hasVariableParams: false
 };

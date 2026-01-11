@@ -151,6 +151,7 @@ export default function LeftPanel({
               setSelectedFunc={setSelectedFunc}
               onAddFunc={onAddFunc}
               onAddInput={onAddInput}
+              functionMetadata={functionMetadata}
             />
           ) : (
             <SettingsTab />
@@ -180,11 +181,19 @@ export default function LeftPanel({
   );
 }
 
-function FunctionsTab({ functions, onAddFunc, onAddInput }) {
+function FunctionsTab({ functions, onAddFunc, onAddInput, functionMetadata }) {
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Deduplicate functions just in case
+  const uniqueFunctions = [...new Set(functions)];
 
   // Icon mapping for different function types
   const getIcon = (label) => {
+    // Check if metadata provides an icon URL/path
+    if (functionMetadata && functionMetadata[label] && functionMetadata[label].icon) {
+      return { type: 'image', src: functionMetadata[label].icon };
+    }
+
     const iconMap = {
       add: MdAdd,
       sub: MdRemove,
@@ -205,10 +214,10 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
       regex: MdCode,
     };
     const IconComponent = iconMap[label] || TbMathFunction;
-    return IconComponent;
+    return { type: 'component', component: IconComponent };
   };
 
-  const filteredFunctions = functions.filter((func) =>
+  const filteredFunctions = uniqueFunctions.filter((func) =>
     func.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -217,7 +226,7 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
       <div className="flex justify-between items-center">
         <h3 className="m-0 text-sm font-bold text-slate-200">Add Nodes</h3>
         <div className="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2 py-1 rounded">
-          {functions.length} functions
+          {uniqueFunctions.length} functions
         </div>
       </div>
 
@@ -227,7 +236,7 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
           <h4 className="text-xs font-semibold text-slate-400">Functions</h4>
           {searchQuery && (
             <span className="text-[10px] text-slate-500">
-              {filteredFunctions.length} of {functions.length}
+              {filteredFunctions.length} of {uniqueFunctions.length}
             </span>
           )}
         </div>
@@ -265,9 +274,25 @@ function FunctionsTab({ functions, onAddFunc, onAddInput }) {
                 title={`Add ${func} node`}
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-slate-700 group-hover:bg-slate-600 flex items-center justify-center transition-colors">
+                  <div className="w-6 h-6 rounded-md bg-slate-700 group-hover:bg-slate-600 flex items-center justify-center transition-colors overflow-hidden">
                     {(() => {
-                      const IconComponent = getIcon(func);
+                      const iconData = getIcon(func);
+                      if (iconData.type === 'image') {
+                        return (
+                          <img
+                            src={iconData.src}
+                            alt={func}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.parentElement.innerHTML = ''; // Clear image
+                              // Note: A full React state fallback would be cleaner but requires refactoring.
+                              // For now, hiding the broken image is the immediate fix.
+                            }}
+                          />
+                        );
+                      }
+                      const IconComponent = iconData.component;
                       return <IconComponent size={14} />;
                     })()}
                   </div>
